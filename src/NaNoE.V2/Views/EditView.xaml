@@ -58,7 +58,7 @@
 
                     <TextBlock Grid.Column="1" Margin="5" Foreground="LightGreen" Text="{Binding Element.Data}" TextWrapping="Wrap" FontStyle="Italic" />
                 </Grid>
-                
+
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
@@ -93,11 +93,11 @@
                             <RowDefinition Height="28" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        
+
                         <Label Content="{Binding ElementType, Mode=TwoWay}" Foreground="LightGray" FontStyle="Italic" HorizontalAlignment="Center"/>
                         <Label Content="{Binding ID, Mode=TwoWay}" Foreground="DarkGray" HorizontalAlignment="Right" />
 
-                        <TextBox Grid.Row="1" x:Name="txtContent" TextWrapping="Wrap" AcceptsReturn="True" Loaded="txtContent_Loaded" IsEnabled="{Binding AllowEdit, Mode=TwoWay}" Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="txtContent_SelectionChanged"/>
+                        <TextBox Grid.Row="1" x:Name="txtContent" TextWrapping="Wrap" AcceptsReturn="False" Loaded="txtContent_Loaded" IsEnabled="{Binding AllowEdit, Mode=TwoWay}" Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="txtContent_SelectionChanged"/>
                     </Grid>
 
                     <Grid Grid.Column="2">
@@ -118,7 +118,7 @@
                         <ColumnDefinition Width="3*" MaxWidth="600" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    
+
                     <Label Content="Next:" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DarkGray" FontStyle="Italic"/>
 
                     <TextBlock Style="{Binding NextStyle}" x:Name="txtNext" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Next.Data}" VerticalAlignment="Center" />

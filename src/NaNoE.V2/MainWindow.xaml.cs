@@ -83,7 +83,7 @@ namespace NaNoE.V2
                 }
                 else
                 {
-                    MessageBox.Show("File already exists...","You can't choose that name");
+                    MessageBox.Show("File already exists...", "You can't choose that name");
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace NaNoE.V2
                 colView.Width = new GridLength(0, GridUnitType.Pixel);
                 butOpen.Content = ">";
             }
-            
+
         }
 
         /// <summary>

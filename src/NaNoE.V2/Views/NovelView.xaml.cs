@@ -27,6 +27,7 @@ namespace NaNoE.V2.Views
             if (e.Key == Key.Enter)
             {
                 DataConnection.Instance.InsertElement(0, ViewModelLocator.Instance.NovelVM.Content.Trim(), false);
+                ViewModelLocator.Instance.NovelVM.Content = "";
                 Navigator.Instance.GoTo("novel");
             }
             else

@@ -63,7 +63,7 @@
                     The element 'jump' is according to the position in the map. You might have a map of length '621' Elements, then '311' would jump to the center of the book.
                 </TextBlock>
             </StackPanel>
-            
+
             <Label Grid.Row="0" Grid.Column="1" Foreground="Gray" FontStyle="Italic" Content="Chapters" HorizontalAlignment="Center"/>
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -81,7 +81,7 @@
                     <Button x:Name="butChapterJump" Grid.Column="1" Content="Jump" Style="{DynamicResource GelButton}" Click="butChapterJump_Click" />
                 </Grid>
             </Grid>
-            
+
             <Label Grid.Row="0" Grid.Column="3" Foreground="Gray" FontStyle="Italic" Content="Bookmarks" HorizontalAlignment="Center"/>
             <Grid Grid.Row="1" Grid.Column="3">
                 <Grid.RowDefinitions>

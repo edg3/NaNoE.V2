@@ -67,7 +67,7 @@
                         <ListBox Margin="3" x:Name="lstSuggestions" Loaded="lstSuggestions_Loaded" MouseDoubleClick="lstSuggestions_MouseDoubleClick" />
                     </TabItem>
                     <TabItem Header="Helpers">
-                        
+
                     </TabItem>
                 </TabControl>
             </Grid>
