@@ -1,4 +1,4 @@
-﻿namespace NaNoE.V2.DataPack
+﻿namespace NaNoE.V2.Data
 {
     /// <summary>
     /// Data style for Edit suggestions

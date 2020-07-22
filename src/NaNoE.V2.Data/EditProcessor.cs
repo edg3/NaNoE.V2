@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using PlatformSpellCheck;
 
-namespace NaNoE.V2.DataPack
+namespace NaNoE.V2.Data
 {
     /// <summary>
     /// Static function that runs with the edit suggestions for us

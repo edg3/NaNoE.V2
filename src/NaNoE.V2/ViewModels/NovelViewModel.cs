@@ -1,5 +1,4 @@
 ﻿using NaNoE.V2.Data;
-using NaNoE.V2.DataPack;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

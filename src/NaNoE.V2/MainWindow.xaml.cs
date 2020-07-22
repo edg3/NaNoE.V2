@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using NaNoE.V2.DataPack;
+using NaNoE.V2.Data;
 using NaNoE.V2.Windows;
 using Xceed.Words.NET;
 using Xceed.Document.NET;
