@@ -1,0 +1,121 @@
+﻿<Window x:Class="NaNoE.V2.Views.NovelView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NaNoE.V2.Views"
+        mc:Ignorable="d"
+        Title="NovelView" Height="500" Width="700">
+    <Grid DataContext="{Binding NovelVM, Source={StaticResource vmLocator}}" Background="#252525">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Content="Edit Mode" Style="{StaticResource GelButton}" Command="{Binding GoToEditView}"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3*" MaxWidth="600"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Style="{Binding PreviousStyle}" x:Name="txtPrevious" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Previous.Data}" VerticalAlignment="Center" />
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="Words: " Foreground="Gray" FontStyle="Italic" HorizontalAlignment="Right" />
+                            <Label Grid.Column="1" Content="{Binding Count}" Foreground="White" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="15" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Content="{Binding Position}" HorizontalAlignment="Right" Foreground="White"/>
+                            <Label Grid.Column="1" Content="/" Foreground="White"/>
+                            <Label Grid.Column="2" Content="{Binding MapCount}" Foreground="DarkGray" />
+                        </Grid>
+                    </StackPanel>
+                    
+                    <TextBox x:Name="txtContent" Grid.Column="1" KeyUp="rtbContent_KeyUp" TextWrapping="Wrap" AcceptsReturn="True" Loaded="txtContent_Loaded"/>
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Label FontStyle="Italic" Foreground="Gray" Content="&lt;enter&gt; for para." />
+
+                        <Button Grid.Row="1" Content="Chapter" Style="{StaticResource GelButton}" Command="{Binding AddChapter}"/>
+                        <Button Grid.Row="2" Content="Note" Style="{StaticResource GelButton}" Command="{Binding AddNote}"/>
+                        <Button Grid.Row="3" Content="Bookmark" Style="{StaticResource GelButton}" Command="{Binding AddBookmark}"/>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="3*" MaxWidth="600"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Style="{Binding NextStyle}" x:Name="txtNext" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Next.Data}" VerticalAlignment="Center" />
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Button Command="{Binding GoToStart}" x:Name="butStart" Content="Start" Grid.Row="0" Style="{DynamicResource GelButton}" />
+                <Button Command="{Binding GoUpOne}" x:Name="butUp" Content="/\" Grid.Row="1" Style="{DynamicResource GelButton}" />
+                <Button Command="{Binding GoToBookmarks}" x:Name="butBookmarks" Content="Bookmarks" Grid.Row="2" Style="{DynamicResource GelButton}" FontSize="10"/>
+                <Button Command="{Binding GoDownOne}" x:Name="butDown" Content="\/" Grid.Row="3" Style="{DynamicResource GelButton}" />
+                <Button Command="{Binding GoToEnd}" x:Name="butEnd" Content="End" Grid.Row="4" Style="{DynamicResource GelButton}" />
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</Window>

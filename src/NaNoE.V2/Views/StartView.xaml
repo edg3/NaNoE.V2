@@ -1,0 +1,24 @@
+﻿<Window x:Class="NaNoE.V2.Views.StartView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NaNoE.V2.Views"
+        mc:Ignorable="d"
+        Title="StartView" Height="500" Width="660">
+    <Grid Background="#222">
+        <StackPanel>
+            <Label Padding="10" FontStyle="Italic" Foreground="LightGray" Content="NaNoE v2.0.0-beta1 is a step in development." />
+            <Label Padding="10" FontStyle="Italic" Foreground="LightGray" Content="The aim was to have everything active again from old uses with the few new features."/>
+            <TextBlock Padding="25" TextWrapping="Wrap" Foreground="LightGreen" FontStyle="Italic">
+                Please note, there is a debug export, 'All Data to TXT'. While the helper side has the edit suggestions, the other option that will be added will be the 'Chapter' notes you can add, the 'Plot' notes, as well as the 'Items' notes. Items being things like characters, items that crop up in your story. Please, let me know if you feel we should have more options in that when this becomes availavle in the future.
+            </TextBlock>
+            <TextBlock Padding="25,0,25,25" TextWrapping="Wrap" Foreground="LightGreen" FontStyle="Italic">
+                The Novel '.ndb' files aim to be usable from now on in every version of NaNoE.V2 that comes in the future. The data design is meant to avoid loss, and other troubles. Just, please note, since I (the developer, edg3) don't trust myself, I also might have missed something in my own testing, I would love to hear feedback on the general experiences you have in NaNoE.V2 - I really appreciate it.
+            </TextBlock>
+            <TextBlock Padding="25,0,25,25" TextWrapping="Wrap" Foreground="LightGreen" FontStyle="Italic">
+                If you think of anything that isn't here, please feel free to reach out and let me know. Features for adjusting the look and feel will eventually be available, I just prefer a dark theme in everything. Similarly, you will be able to customise the 'Edit' suggestions yourself forever in a future beta version. This is just the start.
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,104 @@
+﻿<Window x:Class="NaNoE.V2.Views.BookmarksView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NaNoE.V2.Views"
+        mc:Ignorable="d"
+        Title="BookmarksView" Height="500" Width="700">
+    <Grid DataContext="{Binding BookmarksVM, Source={StaticResource vmLocator}}" Background="#252525">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Content="Back" Style="{DynamicResource GelButton}" Command="{Binding GoBack}"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Foreground="Gray" FontStyle="Italic" Content="General" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26" />
+                        <RowDefinition Height="26" />
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Element: " Foreground="White" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Column="1" Margin="3" PreviewTextInput="TextBox_PreviewTextInput" Text="{Binding ElementNum, Mode=TwoWay}"/>
+                    <Button Grid.Column="1" Grid.Row="1" Content="Jump" Style="{DynamicResource GelButton}" Command="{Binding GoElementJump}"/>
+
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Text="Map Length" Foreground="DarkGray" FontStyle="Italic"/>
+
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding MapCount}" Foreground="White"/>
+                </Grid>
+                <TextBlock Padding="10,5,10,10" FontStyle="Italic" TextWrapping="Wrap" Foreground="DarkGray">
+                    The element 'jump' is according to the position in the map. You might have a map of length '621' Elements, then '311' would jump to the center of the book.
+                </TextBlock>
+            </StackPanel>
+            
+            <Label Grid.Row="0" Grid.Column="1" Foreground="Gray" FontStyle="Italic" Content="Chapters" HorizontalAlignment="Center"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="32" />
+                </Grid.RowDefinitions>
+
+                <ListBox x:Name="lstChapters" Margin="3" ItemsSource="{Binding Chapters}" MouseDoubleClick="lstChapters_MouseDoubleClick"/>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="75"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="butChapterJump" Grid.Column="1" Content="Jump" Style="{DynamicResource GelButton}" Click="butChapterJump_Click" />
+                </Grid>
+            </Grid>
+            
+            <Label Grid.Row="0" Grid.Column="3" Foreground="Gray" FontStyle="Italic" Content="Bookmarks" HorizontalAlignment="Center"/>
+            <Grid Grid.Row="1" Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="32" />
+                </Grid.RowDefinitions>
+
+                <ListBox x:Name="lstBookmarks" ItemsSource="{Binding Bookmarks}" Margin="3" MouseDoubleClick="lstBookmarks_MouseDoubleClick"/>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="75"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="butBookmarkJump" Grid.Column="1" Content="Jump" Style="{DynamicResource GelButton}" Click="butBookmarkJump_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

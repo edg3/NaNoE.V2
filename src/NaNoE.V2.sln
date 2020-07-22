@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaNoE.V2", ".\NaNoE.V2\NaNoE.V2.csproj", "{4EA208A4-FFB8-483C-8052-86EEA40FDC88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaNoE.V2.DataPack", ".\NaNoE.V2.DataPack\NaNoE.V2.DataPack.csproj", "{398805D3-C494-47DF-BADD-9E48E85D426B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EA208A4-FFB8-483C-8052-86EEA40FDC88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EA208A4-FFB8-483C-8052-86EEA40FDC88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EA208A4-FFB8-483C-8052-86EEA40FDC88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EA208A4-FFB8-483C-8052-86EEA40FDC88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398805D3-C494-47DF-BADD-9E48E85D426B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{398805D3-C494-47DF-BADD-9E48E85D426B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{398805D3-C494-47DF-BADD-9E48E85D426B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{398805D3-C494-47DF-BADD-9E48E85D426B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45EE6F9E-A597-46F1-BD58-C7D1E970E779}
+	EndGlobalSection
+EndGlobal

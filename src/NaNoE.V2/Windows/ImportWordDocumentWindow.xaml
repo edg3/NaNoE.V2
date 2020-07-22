@@ -1,0 +1,33 @@
+﻿<Window x:Class="NaNoE.V2.Windows.ImportWordDocumentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NaNoE.V2.Windows"
+        mc:Ignorable="d"
+        Title="Import Word Document" Height="200" MaxHeight="200" MinHeight="200" Width="350" MaxWidth="350" MinWidth="350" Icon="/NaNoE.V2;component/icon.ico">
+    <Grid Background="#222">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="32" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <Label Foreground="White" Margin="3,3,0,0" Content="Please take note:" />
+
+            <Label Foreground="White" Margin="3,0,0,0" Content="- Mark Chapters with the line '[ch]' instead of other text." />
+            <Label Foreground="White" Margin="3,-9,0,0" Content="- This looks at text written in the document as paragraphs." />
+            <Label Foreground="White" Margin="3,-9,0,0" Content="- This doesn't pay attenting to text formatting." />
+
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="butOpenDocX" Click="butOpenDocX_Click" Style="{DynamicResource GelButton}" Grid.Column="1" Margin="3" Content="Import DocX"/>
+        </Grid>
+    </Grid>
+</Window>
