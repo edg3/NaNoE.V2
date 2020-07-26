@@ -105,7 +105,12 @@
                             <Button Style="{DynamicResource GelButton}" Content="Delete Element" Command="{Binding DeleteElement}" />
                             <Button Style="{DynamicResource GelButton}" Content="Refresh Edits >" Command="{Binding RefreshEdits}"/>
                             <Grid Height="24">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
                                 <Label x:Name="lblWord" Foreground="LightGreen"/>
+                                <Button Grid.Column="1" Style="{DynamicResource GelButton}" Content="Next..." Command="{Binding JumpNext}" />
                             </Grid>
                             <Button Style="{DynamicResource GelButton}" Content="Save Edit" Command="{Binding SaveChanges}"/>
                         </StackPanel>

@@ -663,5 +663,37 @@ namespace NaNoE.V2.Data
                 _position = where;
             }
         }
+
+        /// <summary>
+        /// Move along the map until we find the next element.
+        /// </summary>
+        public void EditJump()
+        {
+            if (Position < _map.Count)
+            {
+                bool found = false;
+                while (!found)
+                {
+                    Position++;
+                    if (Position <= _map.Count)
+                    {
+                        var item = GetPosition();
+
+                        if (item.CType == ControlType.Paragraph)
+                        {
+                            var editSuggestions = EditProcessor.Instance.Process(item.Data);
+                            if (editSuggestions.Count > 0)
+                            {
+                                found = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        found = true;
+                    }
+                }
+            }
+        }
     }
 }

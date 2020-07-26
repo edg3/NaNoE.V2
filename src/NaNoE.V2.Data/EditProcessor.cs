@@ -70,8 +70,11 @@ namespace NaNoE.V2.Data
                                  .Replace(".", "")
                                  .Replace(";", "")
                                  .Replace("\"", "");
-                if (splt[i][0] == '\'') splt[i].Remove(0, 1);
-                if ((splt[i])[splt[i].Length - 1] == '\'') splt[i].Remove(splt[i].Length - 1, 1);
+                if (splt[i].Length > 0)
+                {
+                    if (splt[i][0] == '\'') splt[i].Remove(0, 1);
+                    if ((splt[i])[splt[i].Length - 1] == '\'') splt[i].Remove(splt[i].Length - 1, 1);
+                }
             }
 
             // Go through each word

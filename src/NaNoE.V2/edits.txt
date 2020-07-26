@@ -41,3 +41,4 @@ nog;Minimize 'nod';People generally get stuck using this too many times.
 reach;Minimize 'reach';People generally get stuck using this too many times.
 of;Minimise certain 'of';Sure, less 'of' in general is better, but definitely try avoid 'sort of', 'kind of', and the likes
 like;Minimise 'like';We can use a more descriptive way to attach what we describe. Such as 'he held the bat like a heavy weight' could rather be 'the bat weighed down on his grip as if it was too heavy'
+is;Minimise 'is';Usually we can minimise the use of the word 'is'. Consider 'That is a sentence' versus 'That's a sentence'.

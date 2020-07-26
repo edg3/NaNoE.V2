@@ -30,6 +30,7 @@ namespace NaNoE.V2.ViewModels
             _saveChanges = new CommandBase(new Action(_run_saveChanges));
             _refreshEdits = new CommandBase(new Action(_run_refreshEdits));
             _deleteElement = new CommandBase(new Action(_run_deleteElement));
+            _jumpNext = new CommandBase(new Action(_run_jumpNext));
         }
 
         /// <summary>
@@ -463,6 +464,31 @@ namespace NaNoE.V2.ViewModels
         public int Position
         {
             get { return DataConnection.Instance.Position; }
+        }
+
+        /// <summary>
+        /// Run Jump Next
+        /// </summary>
+        private void _run_jumpNext()
+        {
+            if (Data != Element.Data)
+            {
+                MessageBox.Show("You have not saved changes...");
+            }
+            else
+            {
+                DataConnection.Instance.EditJump();
+                Navigator.Instance.GoTo("edit");
+            }
+        }
+
+        /// <summary>
+        /// Jump to Next item that has edit suggestions.
+        /// </summary>
+        private ICommand _jumpNext;
+        public ICommand JumpNext
+        {
+            get { return _jumpNext; }
         }
     }
 }

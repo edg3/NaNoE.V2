@@ -181,7 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="edits.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
