@@ -358,7 +358,10 @@ namespace NaNoE.V2
             if (null != lstSuggestions.SelectedItem)
             {
                 var line = (string)lstSuggestions.SelectedItem;
-                line = line.Split(':')[1].TrimStart(' ');
+                var splt = line.Split(':');
+                if (splt[0].Contains("Spell Check")) return;
+
+                line = splt[1].TrimStart(' ');
                 var opt = (from item in EditProcessor.Instance.EditOptions
                            where item.Detail == line
                            select item).First();
