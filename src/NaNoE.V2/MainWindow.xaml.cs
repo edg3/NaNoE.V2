@@ -90,6 +90,13 @@ namespace NaNoE.V2
                 _sStyle = value;
                 var args = new PropertyChangedEventArgs("SStyle");
                 PropertyChanged?.Invoke(this, args);
+
+                try
+                {
+                    this.RefreshStyle();
+                    Navigator.Instance.GoTo(Navigator.Instance.CurrentView);
+                }
+                catch { }
             }
         }
 
@@ -221,7 +228,8 @@ namespace NaNoE.V2
         /// <param name="e">Event args</param>
         private void ViewConfigClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("View Changes aren't implemented yet, sorry.", "This reminds me...");
+            ViewSettingsWindow window = new ViewSettingsWindow();
+            window.Show();
         }
 
         /// <summary>

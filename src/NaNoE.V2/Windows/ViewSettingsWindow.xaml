@@ -5,17 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NaNoE.V2.Windows"
         mc:Ignorable="d"
-        Title="View Settings" Height="400" Width="500">
+        Title="View Settings" Height="90" Width="220">
     <Grid DataContext="{Binding ViewOptionsVM, Source={StaticResource vmLocator}}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
-            <RowDefinition />
+            <RowDefinition Height="24" />
             <RowDefinition Height="32" />
         </Grid.RowDefinitions>
 
-        <ListBox>
-            
-        </ListBox>
+        <ComboBox x:Name="cmbStyle" Loaded="cmbStyle_Loaded">
+            <ListBoxItem Content="Dark" />
+            <ListBoxItem Content="Light" />
+        </ComboBox>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="butSave" Grid.Column="1" Style="{DynamicResource GelButton}" Content="Save" Click="butSave_Click" />
+        </Grid>
         
     </Grid>
 </Window>
