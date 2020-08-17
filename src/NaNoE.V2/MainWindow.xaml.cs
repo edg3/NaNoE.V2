@@ -6,17 +6,17 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using NaNoE.V2.Data;
 using NaNoE.V2.Windows;
 using Xceed.Words.NET;
 using Xceed.Document.NET;
+using System.ComponentModel;
 
 namespace NaNoE.V2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         /// <summary>
         /// Static style references
@@ -181,7 +181,8 @@ namespace NaNoE.V2
         /// <param name="e">Event args</param>
         private void ViewEditConfigClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Edit Changes aren't implemented yet, sorry.", "This reminds me...");
+            EditSettingsWindow window = new EditSettingsWindow();
+            window.Show();
         }
 
         /// <summary>
@@ -333,6 +334,9 @@ namespace NaNoE.V2
         /// The list used to show suggested edits
         /// </summary>
         private ListBox _listSuggestions;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ListBox ListSuggestions
         {
             get { return _listSuggestions; }
@@ -358,8 +362,10 @@ namespace NaNoE.V2
             if (null != lstSuggestions.SelectedItem)
             {
                 var line = (string)lstSuggestions.SelectedItem;
+                if (line.Contains('}')) return;
+
                 var splt = line.Split(':');
-                if (splt[0].Contains("Spell Check")) return;
+                if (splt[0].Contains("Spell Check")) return;                
 
                 line = splt[1].TrimStart(' ');
                 var opt = (from item in EditProcessor.Instance.EditOptions
@@ -447,6 +453,49 @@ namespace NaNoE.V2
                     }
                 }
                 file.Close();
+            }
+        }
+
+        /// <summary>
+        /// In edit view we move the cursor to the position through right click
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Event args</param>
+        private void lstSuggestions_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Navigator.Instance.CurrentView == "edit")
+            {
+                if (null != ViewModelLocator.Instance.EditVM.txtContent)
+                {
+                    if (null != lstSuggestions.SelectedItem)
+                    {
+                        var line = ViewModelLocator.Instance.EditVM.txtContent.Text;
+                        var splt = line.Split(' ');
+
+                        if (lstSuggestions.SelectedItem.ToString().Contains(']'))
+                        {
+                            var selected = lstSuggestions.SelectedItem.ToString().Split(']');
+                            var num = int.Parse(selected[0]);
+
+                            int i = 0;
+                            for (int j = 0; j < num - 1; ++j)
+                            {
+                                i += 1 + splt[j].Length;
+                            }
+
+                            ViewModelLocator.Instance.EditVM.txtContent.CaretIndex = i;
+                            ViewModelLocator.Instance.EditVM.txtContent.Focus();
+                        }
+                        else if (lstSuggestions.SelectedItem.ToString().Contains('}'))
+                        {
+                            var selected = lstSuggestions.SelectedItem.ToString().Split('}');
+                            var num = int.Parse(selected[0]);
+
+                            ViewModelLocator.Instance.EditVM.txtContent.CaretIndex = num;
+                            ViewModelLocator.Instance.EditVM.txtContent.Focus();
+                        }
+                    }
+                }
             }
         }
     }

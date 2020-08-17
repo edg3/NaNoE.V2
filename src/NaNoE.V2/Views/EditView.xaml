@@ -29,34 +29,34 @@
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Margin="3" Background="#282828">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="3*" MaxWidth="600"/>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5*" MaxWidth="600"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Content="Previous:" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DarkGray" FontStyle="Italic"/>
 
-                    <TextBlock Style="{Binding PreviousStyle}" x:Name="txtPrevious" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Previous.Data}" VerticalAlignment="Center" />
+                    <TextBlock Style="{Binding PreviousStyle}" x:Name="txtPrevious" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Previous.Data}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="3*" MaxWidth="600"/>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5*" MaxWidth="600"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Content="Current:" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DarkGray" FontStyle="Italic"/>
 
-                    <TextBlock Grid.Column="1" Margin="5" Foreground="LightGreen" Text="{Binding Element.Data}" TextWrapping="Wrap" FontStyle="Italic" />
+                    <TextBlock Grid.Column="1" Margin="5" Foreground="LightGreen" Text="{Binding Element.Data}" TextWrapping="Wrap" FontStyle="Italic" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
 
                 <Grid Grid.Row="2">
@@ -102,7 +102,8 @@
 
                     <Grid Grid.Column="2">
                         <StackPanel VerticalAlignment="Bottom">
-                            <Button Style="{DynamicResource GelButton}" Content="Delete Element" Command="{Binding DeleteElement}" />
+                            <Button Style="{DynamicResource WarningGelButton}" Content="Delete Element" Command="{Binding DeleteElement}" />
+                            <Grid Height="19" />
                             <Button Style="{DynamicResource GelButton}" Content="Refresh Edits >" Command="{Binding RefreshEdits}"/>
                             <Grid Height="24">
                                 <Grid.ColumnDefinitions>
@@ -110,23 +111,24 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Label x:Name="lblWord" Foreground="LightGreen"/>
-                                <Button Grid.Column="1" Style="{DynamicResource GelButton}" Content="Next..." Command="{Binding JumpNext}" />
+                                <Button x:Name="butNext" Grid.Column="1" Style="{DynamicResource GelButton}" Content="Find Next" Command="{Binding JumpNext}"/>
                             </Grid>
                             <Button Style="{DynamicResource GelButton}" Content="Save Edit" Command="{Binding SaveChanges}"/>
+                            <CheckBox Content="Flag Ignore (refreshes)" Foreground="White" Margin="3" IsChecked="{Binding Flagged, Mode=TwoWay}"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
 
                 <Grid Grid.Row="3" Background="#282828">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="3*" MaxWidth="600" />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5*" MaxWidth="600" />
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Content="Next:" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DarkGray" FontStyle="Italic"/>
 
-                    <TextBlock Style="{Binding NextStyle}" x:Name="txtNext" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Next.Data}" VerticalAlignment="Center" />
+                    <TextBlock Style="{Binding NextStyle}" x:Name="txtNext" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Next.Data}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
 
             </Grid>
@@ -139,6 +141,7 @@
                     <RowDefinition Height="40" />
                     <RowDefinition Height="40" />
                     <RowDefinition />
+                    <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
 
                 <Button Command="{Binding GoToStart}" x:Name="butStart" Content="Start" Grid.Row="0" Style="{DynamicResource GelButton}" />
@@ -146,6 +149,8 @@
                 <Button Command="{Binding GoToBookmarks}" x:Name="butBookmarks" Content="Bookmarks" Grid.Row="2" Style="{DynamicResource GelButton}" FontSize="10"/>
                 <Button Command="{Binding GoDownOne}" x:Name="butDown" Content="\/" Grid.Row="3" Style="{DynamicResource GelButton}" />
                 <Button Command="{Binding GoToEnd}" x:Name="butEnd" Content="End" Grid.Row="4" Style="{DynamicResource GelButton}" />
+
+                <Button Command="{Binding ResetIgnored}" x:Name="butResetIgnored" Content="Unignore" Grid.Row="6" Style="{DynamicResource WarningGelButton}" FontStyle="Italic"/>
             </Grid>
         </Grid>
     </Grid>

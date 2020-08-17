@@ -22,6 +22,7 @@ namespace NaNoE.V2.Views
         /// <param name="e">The event args</param>
         private void txtContent_Loaded(object sender, RoutedEventArgs e)
         {
+            ViewModelLocator.Instance.EditVM.txtContent = txtContent;
             txtContent.Text = ViewModelLocator.Instance.EditVM.Element.Data;
             txtContent.Focus();
         }
@@ -37,5 +38,6 @@ namespace NaNoE.V2.Views
             var splt = tmp.Split(' ').Length;
             if (null != lblWord) lblWord.Content = "Word: " + splt;
         }
+
     }
 }

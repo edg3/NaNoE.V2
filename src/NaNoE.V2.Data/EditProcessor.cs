@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using PlatformSpellCheck;
@@ -23,7 +24,27 @@ namespace NaNoE.V2.Data
         /// Private data it needs
         /// </summary>
         private SpellChecker _spellChecker;
-        private List<string> _ignorables = new List<string>() { "i", "i'm", "i'll" };
+        private List<string> _ignorables = new List<string>() { "i", "i'm", "i'll", "i'd" };
+
+        /// <summary>
+        /// User flagged ignore list
+        /// </summary>
+        private List<string> _ignored = new List<string>();
+        public List<string> Ignored
+        {
+            get { return _ignored; }
+            set { _ignored = value; }
+        }
+
+        /// <summary>
+        /// User flagged phrases to remove
+        /// </summary>
+        private List<string> _phrases = new List<string>();
+        public List<string> PhraseOptions
+        {
+            get { return _phrases; }
+            set { _phrases = value; }
+        }
 
         /// <summary>
         /// When created it makes the static reference, and loads the 'edits.txt'
@@ -45,8 +66,41 @@ namespace NaNoE.V2.Data
                         string line = "";
                         while ((line = reader.ReadLine()) != null)
                         {
-                            var splt = line.Split(';');
-                            EditOptions.Add(new EditOption(splt[0], splt[1], splt[2]));
+                            if (line != "")
+                            {
+                                var splt = line.Split(';');
+                                EditOptions.Add(new EditOption(splt[0], splt[1], splt[2]));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (File.Exists("ignored.txt"))
+            {
+                using (var f = File.OpenRead("ignored.txt"))
+                {
+                    using (var reader = new StreamReader(f))
+                    {
+                        string line = "";
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            if (line != "") _ignored.Add(line);
+                        }
+                    }
+                }
+            }
+
+            if (File.Exists("shortening.txt"))
+            {
+                using (var f = File.OpenRead("shortening.txt"))
+                {
+                    using  (var reader = new StreamReader(f))
+                    {
+                        string line = "";
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            if (line != "") _phrases.Add(line);
                         }
                     }
                 }
@@ -83,7 +137,62 @@ namespace NaNoE.V2.Data
                 if (splt[j].Length > 0) Check(splt[j], answer, j + 1);
             }
 
+            // Go through phrase checks
+            if (_position == "edit")
+            {
+                foreach (var line in _phrases)
+                {
+                    var splits = line.Split(';');
+                    var a = TextContains(text, splits[0]);
+                    if (a != -1)
+                    {
+                        answer.Add(a + "} " + splits[1]);
+                    }
+                }
+            }
+
             return answer;
+        }
+
+        /// <summary>
+        /// Find a paragraph in the text
+        /// </summary>
+        /// <param name="text">Text to search</param>
+        /// <param name="v">What to search for</param>
+        /// <returns></returns>
+        private int TextContains(string text, string v)
+        {
+            var l_text = text.ToLower();
+            var l_v = v.ToLower();
+
+            if (text.Length < v.Length) return -1;
+
+            if (text.Contains(v))
+            {
+                for (int q = 0; q < text.Length - v.Length - 1; ++q)
+                {
+                    if (text.Substring(q, v.Length) == v)
+                    {
+                        string a = " ";
+                        string b = " ";
+                        if (q > 0)
+                        {
+                            a = text[q - 1].ToString();
+                        }
+                        if (q < text.Length - v.Length - 2)
+                        {
+                            b = text[q + v.Length].ToString();
+                        }
+
+                        a = a.Replace(',', ' ').Replace('"', ' ').Replace(';', ' ').Replace('\'', ' ');
+                        b = b.Replace(',', ' ').Replace('"', ' ').Replace(';', ' ').Replace('\'', ' ');
+
+                        if (a == " " && b == " ") return q;
+                    }
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>
@@ -109,6 +218,9 @@ namespace NaNoE.V2.Data
         /// <param name="wordNum">The position of the word number in the original paragraph (see above)</param>
         private void Check(string v, List<string> answer, int wordNum)
         {
+            // e.g. can put names here, words we ignore completely, etc
+            if (_ignored.Contains(v.ToLower())) return;
+
             // Spell check
             if (_spellChecker.Check(v).Count() > 0)
             {
@@ -121,6 +233,23 @@ namespace NaNoE.V2.Data
             // Only spell check unless in Edit mode.
             if (_position != "edit") return;
 
+            if (v.Length > 0)
+            {
+                char a = v[0];
+                while ((v.Length > 0) && !((a >= 97 && a <= 122) || (a >= 65 && a <= 90)))
+                {
+                    v = v.Substring(1);
+                }
+            }
+            if (v.Length > 0)
+            {
+                char b = v[v.Length - 1];
+                while ((v.Length > 0) && !((b >= 97 && b <= 122) || (b >= 65 && b <= 90)))
+                {
+                    v = v.Substring(0, v.Length - 1);
+                }
+            }
+
             // Linq use to find elements that match either full words or end of words
             var answersA = (from item in EditOptions
                             where item.Opt == v || (item.Opt[0] == '-' && v.EndsWith(item.SubOptimal))
@@ -129,6 +258,51 @@ namespace NaNoE.V2.Data
             // Note: this may only give one reasuly, however that should be fine as it would be edited regardless of it being in multiple options
             //  - e.g. You make the word 'thing' as an Opt, it flags for that AND for '-ing'
             if (null != answersA) answer.Add(wordNum + "] " + v + ": " + answersA.Detail);
+        }
+
+        /// <summary>
+        /// Save all edit options to the file edits.txt
+        /// </summary>
+        public void SaveEditsOptions()
+        {
+            if (File.Exists("edits.txt")) File.Delete("edits.txt");
+
+            using (var stream = File.Create("edits.txt"))
+            {
+                using (var writer = new StreamWriter(stream))
+                {
+                    foreach (var item in EditOptions)
+                    {
+                        writer.WriteLine(item.Opt + ";" + item.Detail + ";" + item.Message);
+                    }
+                }
+            }
+
+            if (File.Exists("ignored.txt")) File.Delete("ignored.txt");
+
+            using (var stream = File.Create("ignored.txt"))
+            {
+                using (var writer = new StreamWriter(stream))
+                {
+                    foreach (var item in Ignored)
+                    {
+                        writer.WriteLine(item);
+                    }
+                }
+            }
+
+            if (File.Exists("shortening.txt")) File.Delete("shortening.txt");
+
+            using (var stream = File.Create("shortening.txt"))
+            {
+                using (var writer = new StreamWriter(stream))
+                {
+                    foreach (var item in PhraseOptions)
+                    {
+                        writer.WriteLine(item);
+                    }
+                }
+            }
         }
     }
 }

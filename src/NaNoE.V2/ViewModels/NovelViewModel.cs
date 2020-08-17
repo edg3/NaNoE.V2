@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -92,12 +93,6 @@ namespace NaNoE.V2.ViewModels
 
             _previousStyle = MainWindow.SPara;
             _nextStyle = MainWindow.SPara;
-
-            if (DataConnection.Instance.MapSize != 0)
-            {
-                UpdateStyles();
-            }
-
         }
 
         /// <summary>

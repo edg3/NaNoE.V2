@@ -94,8 +94,10 @@
     <Compile Include="CommandBase.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BookmarksViewModel.cs" />
+    <Compile Include="ViewModels\EditOptionsViewModel.cs" />
     <Compile Include="ViewModels\EditViewModel.cs" />
     <Compile Include="ViewModels\NovelViewModel.cs" />
+    <Compile Include="ViewModels\ViewOptionsViewModel.cs" />
     <Compile Include="Views\BookmarksView.xaml.cs">
       <DependentUpon>BookmarksView.xaml</DependentUpon>
     </Compile>
@@ -111,8 +113,14 @@
     <Compile Include="Views\StartView.xaml.cs">
       <DependentUpon>StartView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\EditSettingsWindow.xaml.cs">
+      <DependentUpon>EditSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ImportWordDocument.xaml.cs">
       <DependentUpon>ImportWordDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ViewSettingsWindow.xaml.cs">
+      <DependentUpon>ViewSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -146,7 +154,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\EditSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ImportWordDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ViewSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -180,9 +196,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="edits.txt">
+    <None Include="edits.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NaNoE.V2.Data\NaNoE.V2.Data.csproj">
@@ -192,6 +208,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ignored.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shortening.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" />

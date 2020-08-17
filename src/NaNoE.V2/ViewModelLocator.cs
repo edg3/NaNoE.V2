@@ -51,5 +51,22 @@ namespace NaNoE.V2
             get { return _editVM; }
         }
 
+        /// <summary>
+        /// Edit Options VM
+        /// </summary>
+        private EditOptionsViewModel _editOptionsVM = new EditOptionsViewModel();
+        public EditOptionsViewModel EditOptionsVM
+        {
+            get { return _editOptionsVM; }
+        }
+
+        /// <summary>
+        /// View Options VM
+        /// </summary>
+        private ViewOptionsViewModel _viewOptionsVM = new ViewOptionsViewModel();
+        public ViewOptionsViewModel  ViewOptionsVM
+        {
+            get { return _viewOptionsVM; }
+        }
     }
 }

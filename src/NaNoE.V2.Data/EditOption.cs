@@ -1,4 +1,6 @@
-﻿namespace NaNoE.V2.Data
+﻿using System.Windows.Input;
+
+namespace NaNoE.V2.Data
 {
     /// <summary>
     /// Data style for Edit suggestions
@@ -44,6 +46,15 @@
         public string SubOptimal
         {
             get { return Opt.Substring(1); }
+        }
+
+        /// <summary>
+        /// Simplified ToString for use in Edit Settings Window
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Opt + "; " + Detail + "; " + Message;
         }
     }
 }

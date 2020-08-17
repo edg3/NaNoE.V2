@@ -38,6 +38,10 @@ namespace NaNoE.V2
         /// </summary>
         private string _previousView = null;
         private string _currentView = null;
+        public string CurrentView
+        {
+            get { return _currentView; }
+        }
 
         /// <summary>
         /// Changes the view shown
@@ -105,5 +109,6 @@ namespace NaNoE.V2
         {
             if (null != _previousView) GoTo(_previousView);
         }
+
     }
 }

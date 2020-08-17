@@ -266,14 +266,16 @@ namespace NaNoE.V2.Data
             ans.Read();
             var item = ans.GetInt32(1);
             var what = ControlType.Paragraph;
+            bool flagging = true;
             switch (item)
             {
+                case 0: flagging = false; break;
                 case 1: what = ControlType.Chapter; break;
                 case 2: what = ControlType.Note; break;
                 case 3: what = ControlType.Bookmark; break;
             }
 
-            return new NItem(what, ans.GetInt32(0), ans.GetString(2));
+            return new NItem(what, ans.GetInt32(0), ans.GetString(2), flagging);
         }
 
         /// <summary>
@@ -349,20 +351,7 @@ namespace NaNoE.V2.Data
         /// <returns></returns>
         private string StringFormat(string data)
         {
-            string answer = "";
-            int i = 0;
-            while (i < data.Count())
-            {
-                if (data[i] == '\'')
-                {
-                    answer += "''";
-                }
-                else
-                {
-                    answer += data[i];
-                }
-                ++i;
-            }
+            string answer = data.Replace("'", "''");
             data = data.Replace("\r", String.Empty).Replace("\n", String.Empty);
             data = data.Trim();
             return answer;
@@ -377,19 +366,21 @@ namespace NaNoE.V2.Data
             if (_position < 1) return null;
 
             var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = "SELECT id, nitem, sdata FROM elements WHERE id = " + _map[_position - 1];
+            cmd.CommandText = "SELECT id, nitem, sdata, ignored FROM elements WHERE id = " + _map[_position - 1];
             var ans = cmd.ExecuteReader();
             ans.Read();
             var item = ans.GetInt32(1);
             var what = ControlType.Paragraph;
+            bool flagging = true;
             switch (item)
             {
+                case 0: flagging = ans.GetBoolean(3); break;
                 case 1: what = ControlType.Chapter; break;
                 case 2: what = ControlType.Note; break;
                 case 3: what = ControlType.Bookmark; break;
             }
 
-            return new NItem(what, ans.GetInt32(0), ans.GetString(2));
+            return new NItem(what, ans.GetInt32(0), ans.GetString(2), flagging);
         }
 
         /// <summary>
@@ -401,19 +392,21 @@ namespace NaNoE.V2.Data
             if (_position < 2) return null;
 
             var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = "SELECT id, nitem, sdata FROM elements WHERE id = " + _map[_position - 2];
+            cmd.CommandText = "SELECT id, nitem, sdata, ignored FROM elements WHERE id = " + _map[_position - 2];
             var ans = cmd.ExecuteReader();
             ans.Read();
             var item = ans.GetInt32(1);
             var what = ControlType.Paragraph;
+            bool flagging = true;
             switch (item)
             {
+                case 0: flagging = ans.GetBoolean(3); break;
                 case 1: what = ControlType.Chapter; break;
                 case 2: what = ControlType.Note; break;
                 case 3: what = ControlType.Bookmark; break;
             }
 
-            return new NItem(what, ans.GetInt32(0), ans.GetString(2));
+            return new NItem(what, ans.GetInt32(0), ans.GetString(2), flagging);
         }
 
         /// <summary>
@@ -434,19 +427,21 @@ namespace NaNoE.V2.Data
             if (_position < _map.Count)
             {
                 var cmd = _sqlConnection.CreateCommand();
-                cmd.CommandText = "SELECT id, nitem, sdata FROM elements WHERE id = " + _map[_position];
+                cmd.CommandText = "SELECT id, nitem, sdata, ignored FROM elements WHERE id = " + _map[_position];
                 var ans = cmd.ExecuteReader();
                 ans.Read();
                 var item = ans.GetInt32(1);
                 var what = ControlType.Paragraph;
+                bool flagging = true;
                 switch (item)
                 {
+                    case 0: flagging = ans.GetBoolean(3); break;
                     case 1: what = ControlType.Chapter; break;
                     case 2: what = ControlType.Note; break;
                     case 3: what = ControlType.Bookmark; break;
                 }
 
-                return new NItem(what, ans.GetInt32(0), ans.GetString(2));
+                return new NItem(what, ans.GetInt32(0), ans.GetString(2), flagging);
             }
 
             return null;
@@ -675,16 +670,19 @@ namespace NaNoE.V2.Data
                 while (!found)
                 {
                     Position++;
-                    if (Position <= _map.Count)
+                    if (Position < _map.Count)
                     {
                         var item = GetPosition();
-
-                        if (item.CType == ControlType.Paragraph)
+                        if (!item.Flagged)
                         {
-                            var editSuggestions = EditProcessor.Instance.Process(item.Data);
-                            if (editSuggestions.Count > 0)
+
+                            if (item.CType == ControlType.Paragraph)
                             {
-                                found = true;
+                                var editSuggestions = EditProcessor.Instance.Process(item.Data);
+                                if (editSuggestions.Count > 0)
+                                {
+                                    found = true;
+                                }
                             }
                         }
                     }
@@ -694,6 +692,27 @@ namespace NaNoE.V2.Data
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Swap flagged on paragraphs
+        /// </summary>
+        /// <param name="id">ID to swap</param>
+        internal void SwitchFlagged(int id, bool to)
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "UPDATE elements SET ignored = " + (to ? "true" : "false") + " WHERE id = " + id + ";";
+            cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Unflag all paragraphs
+        /// </summary>
+        public void ResetFlags()
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "UPDATE elements SET ignored = false WHERE nitem = 0;";
+            cmd.ExecuteNonQuery();
         }
     }
 }

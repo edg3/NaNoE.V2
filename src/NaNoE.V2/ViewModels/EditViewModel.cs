@@ -3,7 +3,10 @@ using NaNoE.V2.Data;
 using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace NaNoE.V2.ViewModels
 {
@@ -31,6 +34,8 @@ namespace NaNoE.V2.ViewModels
             _refreshEdits = new CommandBase(new Action(_run_refreshEdits));
             _deleteElement = new CommandBase(new Action(_run_deleteElement));
             _jumpNext = new CommandBase(new Action(_run_jumpNext));
+
+            _resetIgnored = new CommandBase(new Action(_run_resetIgnored));
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace NaNoE.V2.ViewModels
                 return;
             }
 
-            Data = Element.Data;
+            if (null != txtContent) txtContent.Text = Element.Data;
             UpdateStyles();
         }
 
@@ -186,11 +191,16 @@ namespace NaNoE.V2.ViewModels
         /// <summary>
         /// Element we are looking at
         /// </summary>
+        private NItem _element = null;
         public NItem Element
         {
             get 
             {
                 if (DataConnection.Instance.NPosition == null) return null;
+                if ((null != _element) && (null != DataConnection.Instance.NPosition))
+                {
+                    if (DataConnection.Instance.NPosition.ID == _element.ID) return _element;
+                }
 
                 var item = DataConnection.Instance.NPosition;
                 ID = item.ID;
@@ -217,9 +227,11 @@ namespace NaNoE.V2.ViewModels
                         break;
                 }
 
-                Data = item.Data;
+                if (null != txtContent) txtContent.Text = item.Data;
                 ItemType = item.CType;
                 _run_refreshEdits();
+
+                _element = item;
 
                 return item;
             }
@@ -340,20 +352,6 @@ namespace NaNoE.V2.ViewModels
         }
 
         /// <summary>
-        /// The temporary data we have can edit for ourselves.
-        /// </summary>
-        private string _data;
-        public string Data
-        {
-            get { return _data; }
-            set
-            {
-                _data = value;
-                if (null != PropertyChanged) PropertyChanged(this, new PropertyChangedEventArgs("Data"));
-            }
-        }
-
-        /// <summary>
         /// Get the difference between two numbers
         ///  - i.e. for word count, e.g. 3 words more, or -2 words less
         /// </summary>
@@ -375,13 +373,14 @@ namespace NaNoE.V2.ViewModels
         /// </summary>
         private void _run_saveChanges()
         {
-            var data = _data; // Check a lot, must be better way on Element binding which refreshes when needed
+            var data = txtContent.Text; // Check a lot, must be better way on Element binding which refreshes when needed
             var element = Element;
 
             var incremental = Diff(element.Data.Split(' ').Length, data.Split(' ').Length);
             DataConnection.Instance.AdjustWordCount(incremental);
 
             DataConnection.Instance.UpdateData(element.ID, data);
+            _element = DataConnection.Instance.GetPosition();
             Navigator.Instance.GoTo("edit");
         }
 
@@ -402,10 +401,22 @@ namespace NaNoE.V2.ViewModels
             MainWindow.Instance.lstSuggestions.Items.Clear();
             if (ItemType == ControlType.Paragraph)
             {
-                var editMap = EditProcessor.Instance.Process(_data);
-                for (int i = 0; i < editMap.Count; ++i)
+                if (null == txtContent)
                 {
-                    MainWindow.Instance.lstSuggestions.Items.Add(editMap[i]);
+                    EditProcessor.Instance.Position = "edit";
+                    var editMap = EditProcessor.Instance.Process(DataConnection.Instance.NPosition.Data);
+                    for (int i = 0; i < editMap.Count; ++i)
+                    {
+                        MainWindow.Instance.lstSuggestions.Items.Add(editMap[i]);
+                    }
+                }
+                else
+                {
+                    var editMap = EditProcessor.Instance.Process(txtContent.Text);
+                    for (int i = 0; i < editMap.Count; ++i)
+                    {
+                        MainWindow.Instance.lstSuggestions.Items.Add(editMap[i]);
+                    }
                 }
             }
             MainWindow.Instance.lstSuggestions.Items.Refresh();
@@ -469,16 +480,21 @@ namespace NaNoE.V2.ViewModels
         /// <summary>
         /// Run Jump Next
         /// </summary>
-        private void _run_jumpNext()
+        private async void _run_jumpNext()
         {
-            if (Data != Element.Data)
+            if (txtContent.Text != _element.Data)
             {
                 MessageBox.Show("You have not saved changes...");
             }
             else
             {
+                MainWindow.Instance.grdSearch.Visibility = Visibility.Visible;
+                await System.Threading.Tasks.Task.Delay(1);
+
                 DataConnection.Instance.EditJump();
                 Navigator.Instance.GoTo("edit");
+
+                MainWindow.Instance.grdSearch.Visibility = Visibility.Hidden;
             }
         }
 
@@ -489,6 +505,56 @@ namespace NaNoE.V2.ViewModels
         public ICommand JumpNext
         {
             get { return _jumpNext; }
+        }
+
+        /// <summary>
+        /// Textbox to move cursor in
+        /// </summary>
+        internal TextBox txtContent;
+
+        /// <summary>
+        /// Run Reset Ignored
+        /// </summary>
+        private void _run_resetIgnored()
+        {
+            var answer = MessageBox.Show("Are you sure you want to reset all paragraphs to not be flag ignored?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (answer == MessageBoxResult.Yes)
+            {
+                DataConnection.Instance.ResetFlags();
+                MessageBox.Show("All paragraphs will be checked in 'Next...' jumps again.");
+
+                // Refresh
+                Navigator.Instance.GoTo("edit");
+            }
+        }
+
+        /// <summary>
+        /// Edited element flagged ignored
+        /// </summary>
+        public bool Flagged
+        {
+            get { return Element.Flagged; }
+            set
+            {
+                var clone = txtContent.Text.Clone().ToString();
+                if (Element.Data != clone)
+                {
+                    MessageBox.Show("You should save your changes first...");
+                }
+                else
+                {
+                    Element.Flagged = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Rest Ignored
+        /// </summary>
+        private ICommand _resetIgnored;
+        public ICommand ResetIgnored
+        {
+            get { return _resetIgnored; }
         }
     }
 }
