@@ -1,4 +1,5 @@
 ﻿using NaNoE.V2.Data;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -44,6 +45,24 @@ namespace NaNoE.V2.Views
         private void txtContent_Loaded(object sender, RoutedEventArgs e)
         {
             txtContent.Focus();
+        }
+
+        private void grdNovel_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshStyles();
+        }
+
+        private void RefreshStyles()
+        {
+            switch (MainWindow.Instance.SStyle)
+            {
+                case "Light":
+                    grdNovel.Style = MainWindow.SLightBackground;
+                    break;
+                default:
+                    grdNovel.Style = MainWindow.SDarkBackground;
+                    break;
+            }
         }
     }
 }

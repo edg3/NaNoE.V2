@@ -10,6 +10,7 @@ using NaNoE.V2.Windows;
 using Xceed.Words.NET;
 using Xceed.Document.NET;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace NaNoE.V2
 {
@@ -25,6 +26,9 @@ namespace NaNoE.V2
         public static Style SChap { get; private set; }
         public static Style SBook { get; private set; }
         public static Style SNote { get; private set; }
+
+        public static Style SDarkBackground { get; private set; }
+        public static Style SLightBackground { get; private set; }
 
         /// <summary>
         /// Static Main Window reference
@@ -55,8 +59,54 @@ namespace NaNoE.V2
             SChap = (Style)this.FindResource("styChapter");
             SBook = (Style)this.FindResource("styBookmark");
             SNote = (Style)this.FindResource("styNote");
+            SDarkBackground = (Style)this.FindResource("styDark");
+            SLightBackground = (Style)this.FindResource("styLight");
+
+            if (File.Exists("style.opt"))
+            {
+                using (var f = File.OpenRead("style.opt"))
+                {
+                    using (var r = new StreamReader(f))
+                    {
+                        SStyle = r.ReadLine();
+                    }
+                }
+            }
+
+            RefreshStyle();
 
             _instance = this;
+        }
+
+        /// <summary>
+        /// Style option set
+        /// </summary>
+        private string _sStyle = "Light";
+        public string SStyle
+        {
+            get => _sStyle;
+            set
+            {
+                _sStyle = value;
+                var args = new PropertyChangedEventArgs("SStyle");
+                PropertyChanged?.Invoke(this, args);
+            }
+        }
+
+        /// <summary>
+        /// Refresh the style of the view
+        /// </summary>
+        private void RefreshStyle()
+        {
+            switch (_sStyle)
+            {
+                case "Light":
+                    grdMainWindowGrid.Style = SLightBackground;
+                    break;
+                default:
+                    grdMainWindowGrid.Style = SDarkBackground;
+                    break;
+            }
         }
 
         /// <summary>

@@ -107,7 +107,17 @@ namespace NaNoE.V2
         /// </summary>
         public void GoBack()
         {
-            if (null != _previousView) GoTo(_previousView);
+            if (null != _previousView)
+            {
+                if ("readme" != _previousView)
+                {
+                    GoTo(_previousView);
+                }
+                else
+                {
+                    GoTo("novel");
+                }
+            }
         }
 
     }

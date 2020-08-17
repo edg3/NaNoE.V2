@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace NaNoE.V2.Views
 {
@@ -39,5 +40,22 @@ namespace NaNoE.V2.Views
             if (null != lblWord) lblWord.Content = "Word: " + splt;
         }
 
+        private void grdEdit_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshStyles();
+        }
+
+        private void RefreshStyles()
+        {
+            switch (MainWindow.Instance.SStyle)
+            {
+                case "Light":
+                    grdEdit.Style = MainWindow.SLightBackground;
+                    break;
+                default:
+                    grdEdit.Style = MainWindow.SDarkBackground;
+                    break;
+            }
+        }
     }
 }

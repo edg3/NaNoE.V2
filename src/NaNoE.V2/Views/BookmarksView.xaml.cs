@@ -1,4 +1,5 @@
 ﻿using NaNoE.V2.Data;
+using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -88,6 +89,24 @@ namespace NaNoE.V2.Views
         private void lstBookmarks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             butBookmarkJump_Click(null, null);
+        }
+
+        private void grdBookmarks_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshStyles();
+        }
+
+        private void RefreshStyles()
+        {
+            switch (MainWindow.Instance.SStyle)
+            {
+                case "Light":
+                    grdBookmarks.Style = MainWindow.SLightBackground;
+                    break;
+                default:
+                    grdBookmarks.Style = MainWindow.SDarkBackground;
+                    break;
+            }
         }
     }
 }

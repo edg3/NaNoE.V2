@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NaNoE.V2.Views"
         mc:Ignorable="d"
         Title="NovelView" Height="500" Width="700">
-    <Grid DataContext="{Binding NovelVM, Source={StaticResource vmLocator}}" Background="#252525">
+    <Grid x:Name="grdNovel" DataContext="{Binding NovelVM, Source={StaticResource vmLocator}}" Loaded="grdNovel_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="24" />
             <RowDefinition />

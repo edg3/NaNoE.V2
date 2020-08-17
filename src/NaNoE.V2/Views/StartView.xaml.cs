@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace NaNoE.V2.Views
 {
@@ -10,6 +11,24 @@ namespace NaNoE.V2.Views
         public StartView()
         {
             InitializeComponent();
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshStyles();
+        }
+
+        private void RefreshStyles()
+        {
+            switch (MainWindow.Instance.SStyle)
+            {
+                case "Light":
+                    grdView.Style = MainWindow.SLightBackground;
+                    break;
+                default:
+                    grdView.Style = MainWindow.SDarkBackground;
+                    break;
+            }
         }
     }
 }

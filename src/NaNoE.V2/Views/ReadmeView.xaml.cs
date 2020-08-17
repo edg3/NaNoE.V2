@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace NaNoE.V2.Views
 {
@@ -34,6 +35,24 @@ namespace NaNoE.V2.Views
         private void butWeb_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://edg3.co.za");
+        }
+
+        private void grdReadme_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshStyles();
+        }
+
+        private void RefreshStyles()
+        {
+            switch (MainWindow.Instance.SStyle)
+            {
+                case "Light":
+                    grdReadme.Style = MainWindow.SLightBackground;
+                    break;
+                default:
+                    grdReadme.Style = MainWindow.SDarkBackground;
+                    break;
+            }
         }
     }
 }

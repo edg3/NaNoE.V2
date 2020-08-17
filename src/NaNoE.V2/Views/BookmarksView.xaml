@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NaNoE.V2.Views"
         mc:Ignorable="d"
         Title="BookmarksView" Height="500" Width="700">
-    <Grid DataContext="{Binding BookmarksVM, Source={StaticResource vmLocator}}" Background="#252525">
+    <Grid x:Name="grdBookmarks" Loaded="grdBookmarks_Loaded" DataContext="{Binding BookmarksVM, Source={StaticResource vmLocator}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition />
@@ -57,7 +57,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Text="Map Length" Foreground="DarkGray" FontStyle="Italic"/>
 
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding MapCount}" Foreground="White"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding MapCount}" Foreground="LightGreen"/>
                 </Grid>
                 <TextBlock Padding="10,5,10,10" FontStyle="Italic" TextWrapping="Wrap" Foreground="DarkGray">
                     The element 'jump' is according to the position in the map. You might have a map of length '621' Elements, then '311' would jump to the center of the book.

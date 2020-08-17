@@ -44,5 +44,15 @@
             <Setter Property="FontWeight" Value="Normal" />
         </Style>
 
+        <!-- Dark Style Elements -->
+        <Style TargetType="Grid" x:Key="styDark">
+            <Setter Property="Background" Value="#222" />
+        </Style>
+        
+        <!-- Light Style Elements -->
+        <Style TargetType="Grid" x:Key="styLight">
+            <Setter Property="Background" Value="#FFF" />
+        </Style>
+        
     </Application.Resources>
 </Application>
