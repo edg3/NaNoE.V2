@@ -44,9 +44,5 @@
             <Setter Property="FontWeight" Value="Normal" />
         </Style>
 
-        <Style TargetType="Grid" x:Key="styBackground">
-            <Setter Property="Background" Value="#222" />
-        </Style>
-
     </Application.Resources>
 </Application>
