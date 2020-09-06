@@ -1,0 +1,26 @@
+﻿<Window x:Class="NaNoE.V2.Windows.Popups.AddItemWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NaNoE.V2.Windows.Popups"
+        mc:Ignorable="d"
+        Title="Add Item" Height="100" Width="250">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="32" />
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="txtItem" Margin="3" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="75" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" x:Name="butAdd" Click="butAdd_Click" Content="Add" Style="{DynamicResource GelButton}" />
+        </Grid>
+    </Grid>
+</Window>

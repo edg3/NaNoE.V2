@@ -8,7 +8,7 @@
         Title="StartView" Height="500" Width="660">
     <Grid x:Name="grdView" Loaded="Grid_Loaded">
         <StackPanel>
-            <Label Padding="10" FontStyle="Italic" Foreground="Gray" Content="NaNoE.V2 1.0.0-beta2 is a step in development." />
+            <Label Padding="10" FontStyle="Italic" Foreground="Gray" Content="NaNoE.V2 1.0.0-beta4 is a step in development." />
             <Label Padding="10" FontStyle="Italic" Foreground="Gray" Content="The aim was to have everything active again from old uses with the few new features."/>
             <TextBlock Padding="25" TextWrapping="Wrap" Foreground="LightGreen" FontStyle="Italic">
                 Please note, there is a debug export, 'All Data to TXT'. While the helper side has the edit suggestions, the other option that will be added will be the 'Chapter' notes you can add, the 'Plot' notes, as well as the 'Items' notes. Items being things like characters, items that crop up in your story. Please, let me know if you feel we should have more options in that when this becomes availavle in the future.
@@ -18,6 +18,9 @@
             </TextBlock>
             <TextBlock Padding="25,0,25,25" TextWrapping="Wrap" Foreground="LightGreen" FontStyle="Italic">
                 If you think of anything that isn't here, please feel free to reach out and let me know. Features for adjusting the look and feel will eventually be available, I just prefer a dark theme in everything. Similarly, you will be able to customise the 'Edit' suggestions yourself forever in a future beta version. This is just the start.
+            </TextBlock>
+            <TextBlock Padding="25,0,25,25" TextWrapping="Wrap" Foreground="LightGreen" FontStyle="Italic">
+                I'd love to have feedback on the current features, and how they're implemented, as part of the prep for 2020's NaNoWriMo! The plan is to have this ready for this years NaNoWriMo for us all!
             </TextBlock>
         </StackPanel>
     </Grid>

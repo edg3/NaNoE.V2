@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NaNoE.V2"
         mc:Ignorable="d"
-        Title="NaNoE.V2 1.0.0-beta3" Height="600" Width="800" MinWidth="800" MinHeight="600">
+        Title="NaNoE.V2 1.0.0-beta4" Height="600" Width="800" MinWidth="800" MinHeight="600">
     <Grid x:Name="grdMainWindowGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3" />
@@ -36,6 +36,8 @@
                 </MenuItem>
                 <MenuItem Header="Import">
                     <MenuItem Header="Word Document" Click="ImportWordDocumentClick" />
+                    <Separator />
+                    <MenuItem Header="Helpers from '.ndb'" Click="ImportHelpers_Click"/>
                 </MenuItem>
                 <MenuItem Header="Export">
                     <MenuItem Header="Novel Format DocX" Click="ExportNovelClick" />
@@ -50,7 +52,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="15" />
-                <ColumnDefinition x:Name="colView" Width="0" />
+                <ColumnDefinition x:Name="colView" Width="200" />
             </Grid.ColumnDefinitions>
             <Frame x:Name="frmContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
             <Grid Grid.Column="1">
@@ -63,12 +65,75 @@
                 <Button x:Name="butOpen" Grid.Row="1" Style="{StaticResource GelButton}" Content=">" Click="ShowSide" Margin="0,2,0,1"/>
             </Grid>
             <Grid Grid.Column="2">
-                <TabControl Background="#222">
+                <TabControl>
                     <TabItem Header="Edit">
                         <ListBox Margin="3" x:Name="lstSuggestions" Loaded="lstSuggestions_Loaded" MouseDoubleClick="lstSuggestions_MouseDoubleClick" MouseRightButtonUp="lstSuggestions_MouseRightButtonUp" />
                     </TabItem>
                     <TabItem Header="Helpers">
+                        <Grid x:Name="grdNotes">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition />
+                                <RowDefinition Height="32" />
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition />
+                                <RowDefinition Height="32"/>
+                            </Grid.RowDefinitions>
 
+                            <Label Grid.Row="0" Content="Note Sets" />
+                            <ListBox Grid.Row="1" x:Name="lstNotes" Margin="3" ItemsSource="{Binding Helpers}" SelectionChanged="lstNotes_SelectionChanged" Loaded="lstNotes_Loaded" />
+
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="75" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Button x:Name="butDelSet" Content="Del" Style="{DynamicResource WarningGelButton}" Margin="3" Click="butDelSet_Click"/>
+                            </Grid>
+
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Grid.ColumnSpan="5" Margin="3,0"/>
+
+                                <Button Grid.Column="0" x:Name="butAddChar" Content="Char" Style="{DynamicResource GelButton}" Margin="3" Click="butAddChar_Click"/>
+
+                                <Button Grid.Column="1" x:Name="butAddItem" Content="Item" Style="{DynamicResource GelButton}" Margin="3" Click="butAddItem_Click"/>
+
+                                <Button Grid.Column="3" x:Name="butAddChapter" Content="Chap" Style="{DynamicResource GelButton}" Margin="3" Click="butAddChapter_Click"/>
+                            </Grid>
+
+                            <Label Grid.Row="4" Content="Inner Notes" />
+                            <ListBox Grid.Row="5" x:Name="lstInnerNotes" Margin="3" MouseDoubleClick="lstInnerNotes_MouseDoubleClick" Loaded="lstInnerNotes_Loaded">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="LightGray" Margin="1" MinWidth="155">
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding}" MaxWidth="155" Padding="3"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Grid Grid.Row="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="75" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="75" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" x:Name="butDeleteItemNote" Content="Del" Style="{DynamicResource WarningGelButton}" Margin="3" Click="butDeleteItemNote_Click" />
+
+                                <Button Grid.Column="2" x:Name="butAddItemNote" Content="Add" Style="{DynamicResource GelButton}" Margin="3" Click="butAddItemNote_Click"/>
+
+                            </Grid>
+                        </Grid>
                     </TabItem>
                 </TabControl>
             </Grid>

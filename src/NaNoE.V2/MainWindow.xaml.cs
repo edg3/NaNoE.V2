@@ -11,6 +11,11 @@ using Xceed.Words.NET;
 using Xceed.Document.NET;
 using System.ComponentModel;
 using System.Windows.Media;
+using NaNoE.V2.Windows.Popups;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.Threading;
 
 namespace NaNoE.V2
 {
@@ -75,6 +80,9 @@ namespace NaNoE.V2
 
             RefreshStyle();
 
+            lstNotes.ItemsSource = DataConnection.Instance.Helpers;
+            lstNotes.Items.Refresh();
+
             _instance = this;
         }
 
@@ -137,6 +145,8 @@ namespace NaNoE.V2
                 {
                     DataConnection.Instance.Create(sfd.FileName.ToString());
                     Navigator.Instance.GoTo("novel");
+
+                    RefreshHelperAction?.Invoke();
                 }
                 else
                 {
@@ -173,6 +183,8 @@ namespace NaNoE.V2
 
                     DataConnection.Instance.Open(ofd.FileName.ToString());
                     Navigator.Instance.GoTo("novel");
+
+                    RefreshHelperAction?.Invoke();
                 }
                 else
                 {
@@ -392,6 +404,8 @@ namespace NaNoE.V2
         /// The list used to show suggested edits
         /// </summary>
         private ListBox _listSuggestions;
+        private ListBox _lstHelpersAdditional;
+        private ListBox _lstHelpersItemsAdditional;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -461,6 +475,8 @@ namespace NaNoE.V2
                     {
                         DataConnection.Instance.Open(file);
                         Navigator.Instance.GoTo("novel");
+
+                        RefreshHelperAction?.Invoke();
                     }
                     catch
                     {
@@ -484,7 +500,7 @@ namespace NaNoE.V2
         {
             if (!DataConnection.Instance.Connected)
             {
-                MessageBox.Show("Oh dear, you haven't opened a novel, so you can export it as debug data.", "Error");
+                MessageBox.Show("Oh dear, you haven't opened a novel, so you can't export it as debug data.", "Error");
                 return;
             }
 
@@ -553,6 +569,226 @@ namespace NaNoE.V2
                             ViewModelLocator.Instance.EditVM.txtContent.Focus();
                         }
                     }
+                }
+            }
+        }
+
+        private void ImportHelpers_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("You need to have an open 'ndb' novel to import Helpers.");
+            }
+            else if (DataConnection.Instance.Helpers.Count > 0)
+            {
+                MessageBox.Show("Not implemented yet: helpers needs blank currently.");
+            }
+            else
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "NDB File|*.ndb";
+                var answer = ofd.ShowDialog();
+                if (answer == true)
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection("Data Source=" + ofd.FileName + "; Version=3;"))
+                    {
+                        conn.Open();
+                        using (var cmd = conn.CreateCommand())
+                        {
+                            cmd.CommandText = "SELECT id, name FROM helpers";
+                            var inAns = cmd.ExecuteReader();
+                            if (inAns.HasRows)
+                            {
+                                while (inAns.Read())
+                                {
+                                    int in_id = inAns.GetInt32(0);
+                                    string in_name = inAns.GetString(1);
+
+                                    string helper = "";
+                                    char q = '[';
+                                    while (q != ' ')
+                                    {
+                                        q = in_name[0];
+                                        in_name = in_name.Substring(1);
+
+                                        if (q != ' ') helper += q;
+                                    }
+
+                                    DataConnection.Instance.ImportHelper(in_name, helper);
+                                    var lastHelper = DataConnection.Instance.GetMaxHelperID();
+
+                                    var cmd2 = conn.CreateCommand();
+                                    cmd2.CommandText = "SELECT data FROM helperitems WHERE helperid = " + in_id + ";";
+                                    var ans2 = cmd2.ExecuteReader();
+                                    if (ans2.HasRows)
+                                    {
+                                        while (ans2.Read())
+                                        {
+                                            DataConnection.Instance.InsertHelperNote(lastHelper, ans2.GetString(0));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        conn.Close();
+                    }
+                }
+            }
+        }
+
+        private void butAddChapter_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("Can't add a chapter helper without a 'ndb' open.");
+            }
+            else
+            {
+                AddChapterHelperWindow window = new AddChapterHelperWindow();
+                window.ShowDialog();
+
+                lstNotes.SelectedItem = null;
+                lstNotes.Items.Refresh();
+            }
+        }
+
+        private void butAddItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("Can't add an item helper without a 'ndb' open.");
+            }
+            else
+            {
+                AddItemWindow window = new AddItemWindow();
+                window.ShowDialog();
+
+                lstNotes.SelectedItem = null;
+                lstNotes.Items.Refresh();
+            }
+        }
+
+        public List<NHelper> Helpers
+        {
+            get => DataConnection.Instance.Helpers;
+        }
+        public Action RefreshHelperAction { get; private set; }
+
+        private void lstNotes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (null != lstNotes.SelectedItem)
+            {
+                var item = (NHelper)lstNotes.SelectedItem;
+                lstInnerNotes.ItemsSource = item.Items;
+                lstInnerNotes.Items.Refresh();
+
+                item.RefreshNotes();
+                lstInnerNotes.ItemsSource = item.Items;
+                lstInnerNotes.Items.Refresh();
+            }
+            else
+            {
+                lstInnerNotes.ItemsSource = new List<string>();
+            }
+            lstNotes.Items.Refresh();
+        }
+
+        private void butAddItemNote_Click(object sender, RoutedEventArgs e)
+        {
+            if (null == lstNotes.SelectedItem)
+            {
+                MessageBox.Show("Please select a Helper to add a note to.");
+            }
+            else
+            {
+                AddNoteWindow window = new AddNoteWindow((NHelper)(lstNotes.SelectedItem));
+                window.ShowDialog();
+                lstInnerNotes.Items.Refresh();
+            }
+        }
+
+        private void lstInnerNotes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (null != lstInnerNotes.SelectedItem)
+            {
+                MessageBox.Show(lstInnerNotes.SelectedItem.ToString());
+            }
+        }
+
+        private void lstNotes_Loaded(object sender, RoutedEventArgs e)
+        {
+            _lstHelpersAdditional = lstNotes;
+            this.RefreshHelperAction += () => {
+                _lstHelpersAdditional.Items.Refresh();
+                _lstHelpersItemsAdditional.Items.Refresh();
+            };
+        }
+
+        private void lstInnerNotes_Loaded(object sender, RoutedEventArgs e)
+        {
+            _lstHelpersItemsAdditional = lstInnerNotes;
+        }
+
+        private void butAddChar_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("Can't add a character helper without a 'ndb' open.");
+            }
+            else
+            {
+                AddCharacterWindow window = new AddCharacterWindow();
+                window.ShowDialog();
+
+                lstNotes.SelectedItem = null;
+                lstNotes.Items.Refresh();
+            }
+        }
+
+        private void butDelSet_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("Can't delete helpers from the edge of the universe... Sorry, please, load a 'ndb'.");
+            }
+            else if (null == lstNotes.SelectedItem)
+            {
+                MessageBox.Show("Please select one you would like to delete.");
+            }
+            else
+            {
+                var answer = MessageBox.Show("Are you sure you would like to delete this category?", "Warning!", MessageBoxButton.YesNo);
+                if (answer == MessageBoxResult.Yes)
+                {
+                    DataConnection.Instance.DeleteHelper(((NHelper)lstNotes.SelectedItem).ID);
+                    lstNotes.SelectedItem = null;
+                    lstNotes.Items.Refresh();
+                }
+            }
+        }
+
+        private void butDeleteItemNote_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("Please load an ndb before you can delete note items.");
+            }
+            else if (null == lstInnerNotes.SelectedItem)
+            {
+                MessageBox.Show("Please select a category, then note in that category, you would like to delete.");
+            }
+            else
+            {
+                var answer = MessageBox.Show("Are you sure you would like to delete this note inside the category?", "Warning!", MessageBoxButton.YesNo);
+                if (answer == MessageBoxResult.Yes)
+                {
+                    var item = (NHelperItem)lstInnerNotes.SelectedItem;
+                    DataConnection.Instance.DeleteHelperItem(item.ID);
+                    var helper = ((NHelper)lstNotes.SelectedItem);
+                    helper.RefreshNotes();
+                    lstInnerNotes.SelectedItem = null;
+                    lstInnerNotes.ItemsSource = helper.Items;
+                    lstInnerNotes.Items.Refresh();
                 }
             }
         }

@@ -86,6 +86,8 @@
     <Compile Include="DataConnection.cs" />
     <Compile Include="EditOption.cs" />
     <Compile Include="EditProcessor.cs" />
+    <Compile Include="NHelper.cs" />
+    <Compile Include="NHelperItem.cs" />
     <Compile Include="NItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

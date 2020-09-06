@@ -100,7 +100,7 @@ namespace NaNoE.V2.Data
                         string line = "";
                         while ((line = reader.ReadLine()) != null)
                         {
-                            if (line != "") _phrases.Add(line);
+                            if (line != "") _phrases.Add(line.ToLower());
                         }
                     }
                 }
@@ -140,10 +140,11 @@ namespace NaNoE.V2.Data
             // Go through phrase checks
             if (_position == "edit")
             {
+                var lowered = text.ToLower();
                 foreach (var line in _phrases)
                 {
                     var splits = line.Split(';');
-                    var a = TextContains(text, splits[0]);
+                    var a = TextContains(lowered, splits[0]);
                     if (a != -1)
                     {
                         answer.Add(a + "} " + splits[1]);
@@ -162,9 +163,6 @@ namespace NaNoE.V2.Data
         /// <returns></returns>
         private int TextContains(string text, string v)
         {
-            var l_text = text.ToLower();
-            var l_v = v.ToLower();
-
             if (text.Length < v.Length) return -1;
 
             if (text.Contains(v))

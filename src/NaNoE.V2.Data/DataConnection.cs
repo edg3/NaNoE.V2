@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace NaNoE.V2.Data
 {
     /// <summary>
     /// Data connection for Novel Data
     /// </summary>
-    public class DataConnection
+    public class DataConnection : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// The Position we are in the map
         /// </summary>
@@ -70,6 +75,8 @@ namespace NaNoE.V2.Data
             SQLiteConnection.CreateFile(name);
             _sqlConnection = new SQLiteConnection("Data Source=" + name + "; Version=3;");
             _sqlConnection.Open();
+            _connected = true;
+
             var tbl1 = _sqlConnection.CreateCommand();
             tbl1.CommandText = "CREATE TABLE elements (id INTEGER primary key AUTOINCREMENT, idbefore INT, idafter INT, nitem INT, sdata TEXT, ignored BOOL)";
             tbl1.ExecuteNonQuery();
@@ -83,6 +90,7 @@ namespace NaNoE.V2.Data
             _position = 0;
             GenerateMap();
             _wordCount = 0;
+            RefreshHelpers();
 
             if (File.Exists("last")) File.Delete("last");
             var last = File.OpenWrite("last");
@@ -92,7 +100,6 @@ namespace NaNoE.V2.Data
             }
             last.Close();
 
-            _connected = true;
         }
 
         /// <summary>
@@ -156,10 +163,12 @@ namespace NaNoE.V2.Data
         {
             _sqlConnection = new SQLiteConnection("Data Source=" + name + "; Version=3;");
             _sqlConnection.Open();
+            _connected = true;
+
             _position = 0;
             GetWordCount();
             GenerateMap();
-            _connected = true;
+            RefreshHelpers();
         }
 
         /// <summary>
@@ -169,6 +178,8 @@ namespace NaNoE.V2.Data
         {
             _sqlConnection.Close();
             _connected = false;
+
+            RefreshHelpers();
         }
 
         /// <summary>
@@ -234,6 +245,199 @@ namespace NaNoE.V2.Data
             ++_position;
 
             UpdateNItems();
+        }
+
+        /// <summary>
+        /// Helpers
+        /// </summary>
+        private List<NHelper> _helpers = new List<NHelper>();
+        public List<NHelper> Helpers
+        {
+            get => _helpers;
+        }
+
+        private NHelper _selectedHelper = null;
+        public NHelper SelectedHelper
+        {
+            get => _selectedHelper;
+            set
+            {
+                _selectedHelper = value;
+                var args = new PropertyChangedEventArgs("SelectedHelper");
+                PropertyChanged?.Invoke(this, args);
+            }
+        }
+
+        /// <summary>
+        /// The style of helper, e.g. '[C:M]' => main character
+        /// </summary>
+        /// <param name="name">Name of helper, e.g. 'Joe Soap'</param>
+        /// <param name="hStyle">Style of helper, e.g. '[C:M]' character main</param>
+        public void InsertHelper(string name, string hStyle)
+        {
+            if (hStyle.Contains("[A:"))
+            {
+                // work out position
+                var splt = hStyle.Split(':');
+                var id = int.Parse(splt[1].Substring(0, splt[1].Length - 1));
+
+                // Update all positions after position
+                var cmd2 = _sqlConnection.CreateCommand();
+                cmd2.CommandText = "SELECT count(id) FROM helpers WHERE name LIKE '[A:%';";
+                var ans2 = cmd2.ExecuteScalar();
+
+                for (int i = int.Parse(ans2.ToString()); i >= id; --i)
+                {
+                    var cmd3 = _sqlConnection.CreateCommand();
+                    var padder = i.ToString();
+                    if (padder.Length < 3)
+                    {
+                        while (padder.Length < 3) padder = "0" + padder;
+                    }
+                    cmd3.CommandText = "SELECT name, id FROM helpers WHERE name LIKE '[A:" + padder + "]%'";
+                    var ans3 = cmd3.ExecuteReader();
+                    ans3.Read();
+                    var line1 = ans3.GetString(0);
+                    var id1 = ans3.GetInt32(1);
+                    var secondPad = (i + 1).ToString();
+                    if (secondPad.Length < 3)
+                    {
+                        while (secondPad.Length < 3) secondPad = "0" + secondPad;
+                    }
+                    var newName = "[A:" + secondPad + "]" + line1.Substring(7);
+
+                    var cmd5 = _sqlConnection.CreateCommand();
+                    cmd5.CommandText = "UPDATE helpers SET name = '" + newName + "' WHERE id = " + id1 + ";";
+                    cmd5.ExecuteNonQuery();
+                }
+
+                // Insert position
+                var cmd4 = _sqlConnection.CreateCommand();
+                cmd4.CommandText = "INSERT INTO helpers (name) VALUES ('" + hStyle + " " + name + "');";
+                cmd4.ExecuteNonQuery();
+            }
+            else
+            {
+                var cmd1 = _sqlConnection.CreateCommand();
+                cmd1.CommandText = "INSERT INTO helpers (name) VALUES ('" + StringFormat(hStyle) + " " + StringFormat(name) + "');";
+                cmd1.ExecuteNonQuery();
+            }
+            RefreshHelpers();
+        }
+
+        public void ImportHelper(string in_name, string helper)
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "INSERT INTO helpers (name) VALUES ('" + helper + " " + in_name + "');";
+            cmd.ExecuteNonQuery();
+
+            RefreshHelpers();
+        }
+
+        public List<NHelperItem> GetHelperItems(int id)
+        {
+            var answer = new List<NHelperItem>();
+
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "SELECT id, data FROM helperitems WHERE helperid = " + id + ";";
+            var ans = cmd.ExecuteReader();
+
+            if (ans.HasRows)
+            {
+                while (ans.Read())
+                {
+                    answer.Add(new NHelperItem(ans.GetInt32(0), id, ans.GetString(1)));
+                }
+            }
+
+            return answer;
+        }
+
+        public void InsertHelperNote(NHelper helper, string text)
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "INSERT INTO helperitems (helperid, data) VALUES (" + helper.ID + ", '" + StringFormat(text) + "');";
+            cmd.ExecuteNonQuery();
+
+            var cmd1 = _sqlConnection.CreateCommand();
+            cmd1.CommandText = "SELECT max(id) FROM helperitems;";
+            var ans = cmd1.ExecuteScalar();
+
+            helper.Items.Add(new NHelperItem(int.Parse(ans.ToString()), helper.ID, text));
+        }
+
+        private void RefreshHelpers()
+        {
+            SelectedHelper = null;
+            Helpers.Clear();
+
+            if (_connected)
+            {
+                var cmd = _sqlConnection.CreateCommand();
+                cmd.CommandText = "SELECT id, name FROM helpers;";
+                var ans = cmd.ExecuteReader();
+                var unsorted = new List<NHelper>();
+                if (ans.HasRows)
+                {
+                    while (ans.Read())
+                    {
+                        unsorted.Add(new NHelper(
+                            ans.GetInt32(0),
+                            ans.GetString(1))
+                            );
+                    }
+                }
+                if (unsorted.Count > 0)
+                {
+                    Helpers.AddRange(unsorted.OrderBy(a => a).ToList());
+                }
+            }
+        }
+
+
+        List<char> _numeric = new List<char>() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        public void DeleteHelper(int iD)
+        {
+            var helper = Helpers.Find(a => a.ID == iD);
+
+            if (helper.Name.Contains("[A:"))
+            {
+                var num = int.Parse(helper.Name.Substring(3, 3));
+                foreach (var hi in Helpers)
+                {
+                    if (hi.Name.Contains("[A:"))
+                    {
+                        var numeri = int.Parse(hi.Name.Substring(3, 3));
+                        if (numeri > num)
+                        {
+                            string newname = (numeri - 1).ToString();
+                            while (newname.Length < 3) newname = "0" + newname;
+                            newname = "[A:" + newname + "]" + hi.Name.Substring(7);
+
+                            var cmd3 = _sqlConnection.CreateCommand();
+                            cmd3.CommandText = "UPDATE helpers SET name = '" + newname + "' WHERE id = " + hi.ID + ";";
+                            cmd3.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "DELETE FROM helpers WHERE id = " + iD + ";";
+            cmd.ExecuteNonQuery();
+
+            var cmd2 = _sqlConnection.CreateCommand();
+            cmd.CommandText = "DELETE FROM helperitems WHERE helperid = " + iD + ";";
+            cmd.ExecuteNonQuery();
+
+            RefreshHelpers();
+        }
+
+        public void DeleteHelperItem(int iD)
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = "DELETE FROM helperitems WHERE id = " + iD + ";";
+            cmd.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -305,6 +509,37 @@ namespace NaNoE.V2.Data
                     reader.GetInt64(3) + "; \t" +
                     reader.GetString(4)
                     );
+            }
+
+            answer.Add("\n\n[Helpers]\n");
+
+            var cmd2 = _sqlConnection.CreateCommand();
+            cmd2.CommandText = "SELECT id, name FROM helpers;";
+            var answer2 = cmd2.ExecuteReader();
+
+            if (answer2.HasRows)
+            {
+                while (answer2.Read())
+                {
+                    var a_id = answer2.GetInt32(0);
+                    var a_name = answer2.GetString(1);
+
+                    answer.Add(" - " + a_name);
+
+                    var cmd3 = _sqlConnection.CreateCommand();
+                    cmd3.CommandText = "SELECT data FROM helperitems WHERE helperid = " + a_id + ";";
+                    var answer3 = cmd3.ExecuteReader();
+
+                    if (answer3.HasRows)
+                    {
+                        while (answer3.Read())
+                        {
+                            answer.Add("\t - " + answer3.GetString(0));
+                        }
+                    }
+
+                    answer.Add("\n");
+                }
             }
 
             return answer;
@@ -713,6 +948,11 @@ namespace NaNoE.V2.Data
             var cmd = _sqlConnection.CreateCommand();
             cmd.CommandText = "UPDATE elements SET ignored = false WHERE nitem = 0;";
             cmd.ExecuteNonQuery();
+        }
+
+        public NHelper GetMaxHelperID()
+        {
+            return Helpers.OrderByDescending(a => a.ID).First();
         }
     }
 }
