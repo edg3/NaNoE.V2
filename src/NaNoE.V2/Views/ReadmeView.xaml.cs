@@ -34,7 +34,7 @@ namespace NaNoE.V2.Views
         /// <param name="e">Event Args</param>
         private void butWeb_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://edg3.co.za");
+            System.Diagnostics.Process.Start("https://www.edg3.co.za/nanoe.v2/");
         }
 
         private void grdReadme_Loaded(object sender, RoutedEventArgs e)

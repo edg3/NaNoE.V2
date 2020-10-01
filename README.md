@@ -1,13 +1,13 @@
 # NaNoE.V2
 
-This is the new version of NaNoE, more details available on: https://edg3.co.za/ [Updates coming soon there]
+This is the new version of NaNoE, more details available on: https://edg3.co.za/NaNoE.V2/
 
 The main changes:
 - Moved to C# WPF
 - Added 'Bookmarks'
 - Added 'Notes'
 - Adjusted 'Helpers'
-- Changed the editing entirely for ease of access
+- Changed the editing entirely for ease of customisation
 - Allowed flagging paragraphs for edit 'ignore'
 - Allowed 'reset flags'
 
@@ -18,5 +18,4 @@ The main changes:
 
 # Steps Currently Needed
 
-- Implement a way to customise the edit suggestions easily for yourself
-- Implement a way to customise layout (I prefer dark, but to allow different layouts and designs as well)
+- Adjustments needed, found through testing

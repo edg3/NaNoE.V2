@@ -30,10 +30,11 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Grid.Column="1">
-            <Label FontWeight="Bold" Foreground="LightGreen">NaNoE.V2-beta1</Label>
+            <Label FontWeight="Bold" Foreground="LightGreen">NaNoE.V2</Label>
             <Label FontStyle="Italic" Foreground="DarkGray">Made by: Ernest "edg3" Loveland</Label>
             <Button x:Name="butWeb" Style="{DynamicResource GelButton}" Content="See more online" Height="28" Width="100" Click="butWeb_Click"/>
-            <TextBlock TextWrapping="Wrap" Foreground="LightGreen">Please note: This open beta has every feature subject to change at a moments notice, however the aim is to make sure the data is safe and stays in the exact same form. At all times.</TextBlock>
+            <TextBlock Margin="3" TextWrapping="Wrap" Foreground="LightGreen">The aim is to have a simple, user friendly, novel writing software.</TextBlock>
+            <TextBlock Margin="3" TextWrapping="Wrap" Foreground="LightGreen">Free, open source, and usable to your liking. Would love to be credited when published, but it isn't required.</TextBlock>
         </StackPanel>
     </Grid>
 </Window>
