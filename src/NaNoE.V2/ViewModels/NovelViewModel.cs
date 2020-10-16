@@ -130,6 +130,7 @@ namespace NaNoE.V2.ViewModels
             else
             {
                 DataConnection.Instance.InsertElement(1, "Chapter", true);
+                Content = "";
                 Navigator.Instance.GoTo("novel");
             }
         }
@@ -155,6 +156,7 @@ namespace NaNoE.V2.ViewModels
             else
             {
                 DataConnection.Instance.InsertElement(2, Content, true);
+                Content = "";
                 Navigator.Instance.GoTo("novel");
             }
         }
@@ -184,6 +186,7 @@ namespace NaNoE.V2.ViewModels
             else
             {
                 DataConnection.Instance.InsertElement(3, Content, true);
+                Content = "";
                 Navigator.Instance.GoTo("novel");
             }
         }

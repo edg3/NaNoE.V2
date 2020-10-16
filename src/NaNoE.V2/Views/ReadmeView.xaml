@@ -34,7 +34,7 @@
             <Label FontStyle="Italic" Foreground="DarkGray">Made by: Ernest "edg3" Loveland</Label>
             <Button x:Name="butWeb" Style="{DynamicResource GelButton}" Content="See more online" Height="28" Width="100" Click="butWeb_Click"/>
             <TextBlock Margin="3" TextWrapping="Wrap" Foreground="LightGreen">The aim is to have a simple, user friendly, novel writing software.</TextBlock>
-            <TextBlock Margin="3" TextWrapping="Wrap" Foreground="LightGreen">Free, open source, and usable to your liking. Would love to be credited when published, but it isn't required.</TextBlock>
+            <TextBlock Margin="3" TextWrapping="Wrap" Foreground="LightGreen">Free, open source, and usable to your liking. Would love to hear all success using NaNoE.V2, give me a shout if you don't mind.</TextBlock>
         </StackPanel>
     </Grid>
 </Window>

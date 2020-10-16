@@ -54,7 +54,7 @@
                         <TextBlock Grid.Column="1" Grid.Row="2" Foreground="Blue" FontStyle="Italic" Text="e.g. 'this' for 'this', or '-ing' for words ending with 'ing'." TextWrapping="Wrap" Margin="3"/>
 
                         <Label Grid.Column="2" Foreground="Green" Content="Message:" />
-                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Message, Mode=TwoWay}" Margin="3" Grid.RowSpan="2"/>
+                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Message, Mode=TwoWay}" Margin="3" Grid.RowSpan="2" TextWrapping="Wrap"/>
                         <TextBlock Grid.Row="2" Grid.Column="3" Foreground="Green" FontStyle="Italic" Text="Add suggestive text here. This cn use '|' for next line marker." TextWrapping="Wrap" Margin="3" />
 
                         <Button Grid.Column="3" Grid.Row="1" Content="Add" Margin="3" Style="{DynamicResource GelButton}" Command="{Binding AddOption}"/>
