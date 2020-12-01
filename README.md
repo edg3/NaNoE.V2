@@ -19,3 +19,7 @@ The main changes:
 # Steps Currently Needed
 
 - Adjustments needed, found through testing
+
+# Errors
+
+- Note: need to my 'style.opt', need to work out how to bugfix
