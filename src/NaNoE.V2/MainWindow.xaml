@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NaNoE.V2"
         mc:Ignorable="d"
-        Title="NaNoE.V2 1.0.0" Height="600" Width="800" MinWidth="800" MinHeight="600">
+        Title="NaNoE.V2 1.0.1" Height="600" Width="800" MinWidth="800" MinHeight="600">
     <Grid x:Name="grdMainWindowGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3" />
@@ -29,6 +29,9 @@
                     <MenuItem Header="New" Click="NewNovelClick" />
                     <MenuItem Header="Open" Click="OpenNovelClick" />
                     <MenuItem Header="Readme" Click="ShowReadmeClick" />
+                </MenuItem>
+                <MenuItem Header="Actions">
+                    <MenuItem Header="Individual word counts" Click="GetCountsClick" />
                 </MenuItem>
                 <MenuItem Header="Configuration">
                     <MenuItem Header="View" Click="ViewConfigClick" />

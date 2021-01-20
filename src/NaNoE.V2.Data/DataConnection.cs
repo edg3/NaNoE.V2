@@ -954,5 +954,23 @@ namespace NaNoE.V2.Data
         {
             return Helpers.OrderByDescending(a => a.ID).First();
         }
+
+        /// <summary>
+        /// Retrieve every paragraph text
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetWordData()
+        {
+            List<string> answer = new List<string>();
+            for (int i = 0; i < _map.Count; ++i)
+            {
+                var e = GetElement(_map[i]);
+                if (e.CType == ControlType.Paragraph)
+                {
+                    answer.Add(e.Data);
+                }
+            }
+            return answer;
+        }
     }
 }

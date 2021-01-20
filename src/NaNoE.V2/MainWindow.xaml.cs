@@ -203,6 +203,19 @@ namespace NaNoE.V2
             Navigator.Instance.GoTo("readme");
         }
 
+        private void GetCountsClick(object sender, RoutedEventArgs e)
+        {
+            if (!DataConnection.Instance.Connected)
+            {
+                MessageBox.Show("We can't count words if we've not opened a novel, sorry.");
+            }
+            else
+            {
+                RepetitionWindow rep = new RepetitionWindow();
+                rep.ShowDialog();
+            }
+        }
+
         /// <summary>
         /// Minimise or maximise the edit view helper
         /// </summary>

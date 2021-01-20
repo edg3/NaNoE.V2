@@ -146,6 +146,9 @@
     <Compile Include="Windows\Popups\AddNoteWindow.xaml.cs">
       <DependentUpon>AddNoteWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Popups\RepetitionWindow.xaml.cs">
+      <DependentUpon>RepetitionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ViewSettingsWindow.xaml.cs">
       <DependentUpon>ViewSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -202,6 +205,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Popups\AddNoteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Popups\RepetitionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
