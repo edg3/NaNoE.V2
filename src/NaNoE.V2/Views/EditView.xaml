@@ -97,7 +97,7 @@
                         <Label Content="{Binding ElementType, Mode=TwoWay}" Foreground="LightGray" FontStyle="Italic" HorizontalAlignment="Center"/>
                         <Label Content="{Binding ID, Mode=TwoWay}" Foreground="DarkGray" HorizontalAlignment="Right" />
 
-                        <TextBox Grid.Row="1" x:Name="txtContent" TextWrapping="Wrap" AcceptsReturn="False" Loaded="txtContent_Loaded" IsEnabled="{Binding AllowEdit, Mode=TwoWay}" Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="txtContent_SelectionChanged"/>
+                        <TextBox SpellCheck.IsEnabled="true" Grid.Row="1" x:Name="txtContent" TextWrapping="Wrap" AcceptsReturn="False" Loaded="txtContent_Loaded" IsEnabled="{Binding AllowEdit, Mode=TwoWay}" Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="txtContent_SelectionChanged"/>
                     </Grid>
 
                     <Grid Grid.Column="2">

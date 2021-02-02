@@ -5,12 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NaNoE.V2"
         mc:Ignorable="d"
-        Title="NaNoE.V2 1.0.1" Height="600" Width="800" MinWidth="800" MinHeight="600">
+        Title="NaNoE.V2 1.0.2" Height="600" Width="800" MinWidth="800" MinHeight="600">
     <Grid x:Name="grdMainWindowGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3" />
-            <ColumnDefinition Width="77*" />
-            <ColumnDefinition Width="316*"/>
+            <ColumnDefinition />
             <ColumnDefinition Width="3" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -53,9 +52,9 @@
 
         <Grid Grid.Row="2" Grid.Column="1" Margin="1" x:Name="grdView" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="15" />
-                <ColumnDefinition x:Name="colView" Width="200" />
+                <ColumnDefinition x:Name="colView" Width="1*" />
             </Grid.ColumnDefinitions>
             <Frame x:Name="frmContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
             <Grid Grid.Column="1">
@@ -68,6 +67,10 @@
                 <Button x:Name="butOpen" Grid.Row="1" Style="{StaticResource GelButton}" Content=">" Click="ShowSide" Margin="0,2,0,1"/>
             </Grid>
             <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="85" />
+                </Grid.RowDefinitions>
                 <TabControl>
                     <TabItem Header="Edit">
                         <ListBox Margin="3" x:Name="lstSuggestions" Loaded="lstSuggestions_Loaded" MouseDoubleClick="lstSuggestions_MouseDoubleClick" MouseRightButtonUp="lstSuggestions_MouseRightButtonUp" />
@@ -139,6 +142,8 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
+                
+                <TextBlock Grid.Row="1" Text="Double-click Edit's to see messages if available, right click to see where it is, if available. Note: Repetitions could show the incorrect sentence number." TextWrapping="Wrap" FontStyle="Italic" Foreground="LightGray" Margin="3"/>
             </Grid>
         </Grid>
 

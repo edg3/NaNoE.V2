@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using PlatformSpellCheck;
+using System.Windows.Controls;
 
 namespace NaNoE.V2.Data
 {
@@ -15,6 +15,7 @@ namespace NaNoE.V2.Data
         /// Static reference, helps with the data binding and updating
         /// </summary>
         private static EditProcessor _instance;
+
         public static EditProcessor Instance
         {
             get { return _instance; }
@@ -23,7 +24,6 @@ namespace NaNoE.V2.Data
         /// <summary>
         /// Private data it needs
         /// </summary>
-        private SpellChecker _spellChecker;
         private List<string> _ignorables = new List<string>() { "i", "i'm", "i'll", "i'd" };
 
         /// <summary>
@@ -53,7 +53,6 @@ namespace NaNoE.V2.Data
         public EditProcessor()
         {
             _instance = this;
-            _spellChecker = new SpellChecker();
 
             EditOptions = new List<EditOption>();
 
@@ -116,20 +115,8 @@ namespace NaNoE.V2.Data
         {
             List<string> answer = new List<string>();
 
-            // Remove unneeded formating
+            // Ignore unneeded formating
             var splt = text.Split(' ');
-            for (int i = 0; i < splt.Length; ++i)
-            {
-                splt[i] = splt[i].Replace(",", "")
-                                 .Replace(".", "")
-                                 .Replace(";", "")
-                                 .Replace("\"", "");
-                if (splt[i].Length > 0)
-                {
-                    if (splt[i][0] == '\'') splt[i].Remove(0, 1);
-                    if ((splt[i])[splt[i].Length - 1] == '\'') splt[i].Remove(splt[i].Length - 1, 1);
-                }
-            }
 
             // Go through each word
             for (int j = 0; j < splt.Length; ++j)
@@ -150,6 +137,34 @@ namespace NaNoE.V2.Data
                         answer.Add(a + "} " + splits[1]);
                     }
                 }
+            }
+
+            // Process seperate sentences for repeated word sets
+            var sentences = text.Split('.');
+            bool broken = false;
+            int which_sentence = 0;
+            foreach (var sentence in sentences)
+            {
+                ++which_sentence;
+                if (sentence.Length > 1)
+                {
+                    var sentence_words = sentence.Split(' ');
+                    for (int i = 0; i < sentence_words.Length - 3 && !broken; ++i)
+                    {
+                        var rep_words = sentence_words[i] + " " + sentence_words[i + 1];
+                        for (int j = i + 2; j < sentence_words.Length - 1 && !broken; ++j)
+                        {
+                            var test_words = sentence_words[j] + " " + sentence_words[j + 1];
+                            if (test_words.Trim(_trimChars) == rep_words.Trim(_trimChars))
+                            {
+                                answer.Add("Possible Repetition: [S " + which_sentence + "] " + rep_words);
+                                broken = true;
+                            }
+                        }
+                    }
+                }
+
+                if (broken) break;
             }
 
             return answer;
@@ -214,19 +229,13 @@ namespace NaNoE.V2.Data
         /// <param name="v">The word to check</param>
         /// <param name="answer">List to add suggestion answers to as needed</param>
         /// <param name="wordNum">The position of the word number in the original paragraph (see above)</param>
+        private char[] _trimChars = new char[] { '"', ',', '.', '\'', ';', ' ' };
         private void Check(string v, List<string> answer, int wordNum)
         {
             // e.g. can put names here, words we ignore completely, etc
-            if (_ignored.Contains(v.ToLower())) return;
-
-            // Spell check
-            if (_spellChecker.Check(v).Count() > 0)
-            {
-                if (!_ignorables.Contains(v))
-                {
-                    answer.Add(wordNum + "] Spell Check: " + v);
-                }
-            }
+            if (_ignored.Contains(v.ToLower()) 
+                || _ignored.Contains(v.ToLower().Trim(_trimChars)))
+                return;
 
             // Only spell check unless in Edit mode.
             if (_position != "edit") return;

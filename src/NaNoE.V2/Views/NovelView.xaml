@@ -70,7 +70,7 @@
                         </Grid>
                     </StackPanel>
 
-                    <TextBox x:Name="txtContent" Grid.Column="1" KeyUp="rtbContent_KeyUp" TextWrapping="Wrap" AcceptsReturn="True" Loaded="txtContent_Loaded"/>
+                    <TextBox SpellCheck.IsEnabled="true" x:Name="txtContent" Grid.Column="1" KeyUp="rtbContent_KeyUp" TextWrapping="Wrap" AcceptsReturn="True" Loaded="txtContent_Loaded"/>
 
                     <Grid Grid.Column="2">
                         <Grid.RowDefinitions>

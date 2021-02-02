@@ -447,7 +447,7 @@ namespace NaNoE.V2
             if (null != lstSuggestions.SelectedItem)
             {
                 var line = (string)lstSuggestions.SelectedItem;
-                if (line.Contains('}')) return;
+                if (line.Contains('}') || line.Contains("Possible Repetition: ")) return;
 
                 var splt = line.Split(':');
                 if (splt[0].Contains("Spell Check")) return;                
@@ -557,6 +557,16 @@ namespace NaNoE.V2
                     if (null != lstSuggestions.SelectedItem)
                     {
                         var line = ViewModelLocator.Instance.EditVM.txtContent.Text;
+                     
+                        if (lstSuggestions.SelectedItem.ToString().Contains("Possible Repetition: "))
+                        {
+                            var selected = lstSuggestions.SelectedItem.ToString().Split(']')[1].Trim(' ');
+                            var pos = line.IndexOf(selected);
+                            ViewModelLocator.Instance.EditVM.txtContent.CaretIndex = pos;
+                            ViewModelLocator.Instance.EditVM.txtContent.Focus();
+                            return;
+                        }
+
                         var splt = line.Split(' ');
 
                         if (lstSuggestions.SelectedItem.ToString().Contains(']'))
