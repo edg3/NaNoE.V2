@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -58,7 +57,8 @@ namespace NaNoE.V2.ViewModels
                 {
                     MainWindow.Instance.lstSuggestions.Items.Add(EditMap[i]);
                 }
-            } catch { }
+            }
+            catch { }
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace NaNoE.V2.ViewModels
         {
             get { return DataConnection.Instance.NNext; }
         }
-        
+
         /// <summary>
         /// Run Go Up One
         /// </summary>

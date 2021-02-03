@@ -1,21 +1,18 @@
 ﻿using Microsoft.Win32;
 using NaNoE.V2.Data;
+using NaNoE.V2.Windows;
+using NaNoE.V2.Windows.Popups;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using NaNoE.V2.Windows;
-using Xceed.Words.NET;
 using Xceed.Document.NET;
-using System.ComponentModel;
-using System.Windows.Media;
-using NaNoE.V2.Windows.Popups;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data.SQLite;
-using System.Threading;
+using Xceed.Words.NET;
 
 namespace NaNoE.V2
 {
@@ -450,7 +447,7 @@ namespace NaNoE.V2
                 if (line.Contains('}') || line.Contains("Possible Repetition: ")) return;
 
                 var splt = line.Split(':');
-                if (splt[0].Contains("Spell Check")) return;                
+                if (splt[0].Contains("Spell Check")) return;
 
                 line = splt[1].TrimStart(' ');
                 var opt = (from item in EditProcessor.Instance.EditOptions
@@ -557,7 +554,7 @@ namespace NaNoE.V2
                     if (null != lstSuggestions.SelectedItem)
                     {
                         var line = ViewModelLocator.Instance.EditVM.txtContent.Text;
-                     
+
                         if (lstSuggestions.SelectedItem.ToString().Contains("Possible Repetition: "))
                         {
                             var selected = lstSuggestions.SelectedItem.ToString().Split(']')[1].Trim(' ');
@@ -741,7 +738,8 @@ namespace NaNoE.V2
         private void lstNotes_Loaded(object sender, RoutedEventArgs e)
         {
             _lstHelpersAdditional = lstNotes;
-            this.RefreshHelperAction += () => {
+            this.RefreshHelperAction += () =>
+            {
                 _lstHelpersAdditional.Items.Refresh();
                 _lstHelpersItemsAdditional.Items.Refresh();
             };

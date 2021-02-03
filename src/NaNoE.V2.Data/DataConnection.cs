@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace NaNoE.V2.Data
 {
@@ -23,7 +21,7 @@ namespace NaNoE.V2.Data
         public int Position
         {
             get { return _position; }
-            set { _position = value; } 
+            set { _position = value; }
         }
 
         /// <summary>
@@ -212,7 +210,7 @@ namespace NaNoE.V2.Data
             }
 
             var cmd1 = _sqlConnection.CreateCommand();
-            cmd1.CommandText = "INSERT INTO elements (idbefore, idafter, nitem, sdata, ignored) VALUES (" + idbefore + ", " + idafter + ", " + nitem + ", '" + StringFormat(data) + "', " + (ignored ? "true" : "false") +")";
+            cmd1.CommandText = "INSERT INTO elements (idbefore, idafter, nitem, sdata, ignored) VALUES (" + idbefore + ", " + idafter + ", " + nitem + ", '" + StringFormat(data) + "', " + (ignored ? "true" : "false") + ")";
             cmd1.ExecuteNonQuery();
 
             var cmd2 = _sqlConnection.CreateCommand();
@@ -727,7 +725,7 @@ namespace NaNoE.V2.Data
             get
             {
                 if (_map == null) return 0;
-                return _map.Count; 
+                return _map.Count;
             }
         }
 

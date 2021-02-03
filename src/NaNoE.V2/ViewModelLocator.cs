@@ -64,7 +64,7 @@ namespace NaNoE.V2
         /// View Options VM
         /// </summary>
         private ViewOptionsViewModel _viewOptionsVM = new ViewOptionsViewModel();
-        public ViewOptionsViewModel  ViewOptionsVM
+        public ViewOptionsViewModel ViewOptionsVM
         {
             get { return _viewOptionsVM; }
         }

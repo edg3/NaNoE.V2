@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-
-namespace NaNoE.V2.Data
+﻿namespace NaNoE.V2.Data
 {
     /// <summary>
     /// Data style for Edit suggestions
@@ -34,7 +32,7 @@ namespace NaNoE.V2.Data
         /// <param name="detail">Short detail</param>
         /// <param name="message">Edit message</param>
         public EditOption(string opt, string detail, string message)
-        { 
+        {
             Opt = opt;
             Detail = detail;
             Message = message;

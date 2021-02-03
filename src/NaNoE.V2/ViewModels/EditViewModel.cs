@@ -1,12 +1,9 @@
 ﻿using NaNoE.V2.Data;
-using NaNoE.V2.Data;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace NaNoE.V2.ViewModels
 {
@@ -194,7 +191,7 @@ namespace NaNoE.V2.ViewModels
         private NItem _element = null;
         public NItem Element
         {
-            get 
+            get
             {
                 if (DataConnection.Instance.NPosition == null) return null;
                 if ((null != _element) && (null != DataConnection.Instance.NPosition))

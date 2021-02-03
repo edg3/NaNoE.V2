@@ -1,5 +1,4 @@
 ﻿using NaNoE.V2.Data;
-using System;
 using System.Windows;
 using System.Windows.Input;
 

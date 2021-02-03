@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace NaNoE.V2.Data
 {
@@ -94,7 +92,7 @@ namespace NaNoE.V2.Data
             {
                 using (var f = File.OpenRead("shortening.txt"))
                 {
-                    using  (var reader = new StreamReader(f))
+                    using (var reader = new StreamReader(f))
                     {
                         string line = "";
                         while ((line = reader.ReadLine()) != null)
@@ -233,7 +231,7 @@ namespace NaNoE.V2.Data
         private void Check(string v, List<string> answer, int wordNum)
         {
             // e.g. can put names here, words we ignore completely, etc
-            if (_ignored.Contains(v.ToLower()) 
+            if (_ignored.Contains(v.ToLower())
                 || _ignored.Contains(v.ToLower().Trim(_trimChars)))
                 return;
 

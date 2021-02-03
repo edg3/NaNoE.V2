@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NaNoE.V2.ViewModels
 {
@@ -14,6 +10,6 @@ namespace NaNoE.V2.ViewModels
             get { return _options; }
         }
 
-        
+
     }
 }

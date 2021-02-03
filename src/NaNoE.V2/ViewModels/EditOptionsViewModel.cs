@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -48,7 +45,7 @@ namespace NaNoE.V2.ViewModels
         /// </summary>
         public List<string> PhraseOptions
         {
-            get { return EditProcessor.Instance.PhraseOptions;  }
+            get { return EditProcessor.Instance.PhraseOptions; }
         }
 
         /// <summary>
