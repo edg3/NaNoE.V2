@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace NaNoE.V2.Data
 {
@@ -62,6 +63,7 @@ namespace NaNoE.V2.Data
         private DataConnection()
         {
             _connected = false;
+            _wordCount = 0;
         }
 
         /// <summary>
@@ -151,6 +153,7 @@ namespace NaNoE.V2.Data
 
             _position = _map.Count;
             UpdateNItems();
+            RefreshWordsBefore();
         }
 
         /// <summary>
@@ -715,6 +718,8 @@ namespace NaNoE.V2.Data
             _nPosition = GetPosition();
             _nNext = GetNext();
             _nPrevious = GetPrevious();
+
+            RefreshWordsBefore();
         }
 
         /// <summary>
@@ -739,6 +744,15 @@ namespace NaNoE.V2.Data
         }
 
         /// <summary>
+        /// Count of words above current position
+        /// </summary>
+        private int _wordsBeforePosition;
+        public int WordsBeforePosition
+        {
+            get => _wordsBeforePosition;
+        }
+
+        /// <summary>
         /// Get the words in paragraphs inside the DB
         /// </summary>
         private void GetWordCount()
@@ -751,6 +765,8 @@ namespace NaNoE.V2.Data
             {
                 _wordCount += reader.GetInt32(0);
             }
+
+            RefreshWordsBefore();
         }
 
         /// <summary>
@@ -969,6 +985,66 @@ namespace NaNoE.V2.Data
                 }
             }
             return answer;
+        }
+
+        /// <summary>
+        /// Update word count before element we are looking at
+        /// </summary>
+        public void RefreshWordsBefore()
+        {
+            if (null == _map) return;
+
+
+            int final = 0;
+            int id = -1;
+            // If too large => Max
+            if (Position > 0 && Position == _map.Count)
+            {
+                id = Position - 1;
+                final = FindWordCount(_map[id]);
+            }
+            // If too small => 0, we're at the start completely
+            else if (Position <= 0)
+            {
+                _wordsBeforePosition = 0;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WordsBefore"));
+                return;
+            }
+            else
+            {
+                id = Position;
+            }
+
+            // Map all above position
+            var idWhereWeAre = _map[id];
+            var tmpMap = _map.TakeWhile(a => a != idWhereWeAre).ToList();
+            foreach (var item in tmpMap)
+            {
+                final += FindWordCount(item);
+            }
+            _wordsBeforePosition = final;
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WordsBefore"));
+        
+        }
+
+        /// <summary>
+        /// Get count of item
+        /// </summary>
+        /// <param name="id">ID of item to count</param>
+        /// <returns>Count of words in item, or 0 for Chapters/Bookmarks/Notes</returns>
+        private int FindWordCount(int id)
+        {
+            var countcmd = _sqlConnection.CreateCommand();
+            countcmd.CommandText = "SELECT length(sdata) - length(replace(sdata, ' ', '')) + 1 FROM elements WHERE nitem = 0 AND id = " + id + ";";
+            var reader = countcmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                reader.Read();
+                return reader.GetInt32(0);
+            }
+
+            return 0;
         }
     }
 }

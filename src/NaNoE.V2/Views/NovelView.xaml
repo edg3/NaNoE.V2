@@ -39,6 +39,11 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
+                    <StackPanel>
+                        <TextBlock Text="Words above:" Foreground="#555" Margin="5"/>
+                        <TextBlock Text="{Binding WordsBefore, Mode=OneWay}" HorizontalAlignment="Right" Margin="5" Foreground="#666" />
+                    </StackPanel>
+
                     <TextBlock Style="{Binding PreviousStyle}" x:Name="txtPrevious" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding Previous.Data}" VerticalAlignment="Center" />
                 </Grid>
 

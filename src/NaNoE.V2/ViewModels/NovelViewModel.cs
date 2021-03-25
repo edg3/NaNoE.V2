@@ -404,5 +404,10 @@ namespace NaNoE.V2.ViewModels
         {
             get { return DataConnection.Instance.Position; }
         }
+
+        public int WordsBefore
+        {
+            get => DataConnection.Instance.WordsBeforePosition;
+        }
     }
 }
