@@ -116,6 +116,12 @@ namespace NaNoE.V2.Data
             // Ignore unneeded formating
             var splt = text.Split(' ');
 
+            // Remove ignored formats, e.g. '"', ';'
+            for (int k = 0; k < splt.Length; ++k)
+            {
+                splt[k] = splt[k].TrimStart(_trimChars).TrimEnd(_trimChars);
+            }
+
             // Go through each word
             for (int j = 0; j < splt.Length; ++j)
             {
@@ -141,7 +147,8 @@ namespace NaNoE.V2.Data
             var sentences = text.Split('.');
             bool broken = false;
             int which_sentence = 0;
-            foreach (var sentence in sentences)
+            // ToDo - make this also split via "?" and "!"
+            foreach (var sentence in sentences) 
             {
                 ++which_sentence;
                 if (sentence.Length > 1)

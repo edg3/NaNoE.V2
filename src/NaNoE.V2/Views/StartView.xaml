@@ -8,7 +8,7 @@
         Title="StartView" Height="500" Width="660">
     <Grid x:Name="grdView" Loaded="Grid_Loaded">
         <StackPanel>
-            <Label Padding="10" FontStyle="Italic" Foreground="Gray" Content="NaNoE.V2 1.0.0" />
+            <Label Padding="10" FontStyle="Italic" Foreground="Gray" Content="NaNoE.V2 1.0.4" />
             <TextBlock Margin="10" TextWrapping="Wrap" Foreground="LightGreen">
                 <TextBlock FontWeight="Bold">NaNoE.V2</TextBlock> aims to make it easier to manage the large amount of things we come up with as we 
                 need whenever we want to write a novel.
